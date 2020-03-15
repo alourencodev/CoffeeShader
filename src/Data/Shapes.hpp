@@ -6,7 +6,7 @@
 namespace coffee::shapes
 {
 
-static const std::vector<float> k_cubeCoords = {
+static const std::vector<float> k_cube = {
     1.0f,1.0f,1.0f,    -1.0f,1.0f,1.0f,   -1.0f,-1.0f,1.0f,   1.0f,-1.0f,1.0f,    
     1.0f,1.0f,1.0f,     1.0f,-1.0f,1.0f,   1.0f,-1.0f,-1.0f,  1.0f,1.0f,-1.0f,    
     1.0f,1.0f,1.0f,     1.0f,1.0f,-1.0f,  -1.0f,1.0f,-1.0f,  -1.0f,1.0f,1.0f,     
