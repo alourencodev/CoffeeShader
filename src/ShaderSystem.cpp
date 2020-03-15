@@ -18,6 +18,7 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
         
         if (!file.is_open()) {
             std::cerr << "ERROR Unable to open file " << dir << "!" << std::endl;
+            std::exit(1);
         }
 
         std::stringstream buffer;
@@ -43,6 +44,7 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
 		{
 			glGetShaderInfoLog(shaderId, sizeof(error), NULL, error);
 			std::cerr << "Error Compiling shader:\n" << error << std::endl;
+            std::exit(1);
 		}
         
         return shaderId;
@@ -64,6 +66,7 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
 		{
 			glGetProgramInfoLog(programID, sizeof(error), NULL, error);
 			std::cerr << "Error Linking shader program:\n" << error << std::endl;
+            std::exit(1);
 		}
 
         return programID;
