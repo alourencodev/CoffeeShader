@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "Data/CanvasData.hpp"
+
 namespace coffee::shaderSystem
 {
 
@@ -34,7 +36,7 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
         glCompileShader(shaderId);
 
         GLint success = 0;
-		char error[128] = {0};
+		char error[128] = "";
 
 		glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
 		if (success == GL_FALSE)
@@ -46,11 +48,36 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
         return shaderId;
     };
 
+    auto linkProgram = [](GLuint vertShaderId, GLuint fragShaderId) -> GLuint
+    {
+        GLuint programID = glCreateProgram();
+        glAttachShader(programID, vertShaderId);
+        glAttachShader(programID, fragShaderId);
+        glLinkProgram(programID);
+
+		GLint success = 0;
+		char error[128] = "";
+
+		glGetProgramiv(programID, GL_LINK_STATUS, &success);
+
+		if (success == GL_FALSE)
+		{
+			glGetProgramInfoLog(programID, sizeof(error), NULL, error);
+			std::cerr << "Error Linking shader program:\n" << error << std::endl;
+		}
+
+        return programID;
+    };
+
     std::string vertSource = loadShader(vertexDir);
     std::string fragSource = loadShader(fragmentDir);
 
     GLuint vertShaderId = compileShader(GL_VERTEX_SHADER, vertSource);
     GLuint fragShaderId = compileShader(GL_FRAGMENT_SHADER, fragSource);
+
+    GLuint programID = linkProgram(vertShaderId, fragShaderId);
+
+    CanvasData::get().shaderProgram = programID;
 }
     
 }

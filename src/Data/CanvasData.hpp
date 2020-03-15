@@ -11,11 +11,12 @@ class CanvasData
 public:
     GLuint shaderProgram;
 
-    static CanvasData &get() { return _instance; };
-    
-private:
-    static CanvasData _instance;
-}
+    static CanvasData &get() 
+    { 
+        static CanvasData instance;
+        return instance; 
+    };
+};
 
 }
 
