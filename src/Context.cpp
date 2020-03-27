@@ -50,9 +50,9 @@ bool update()
         return false;
     }
 
+    glfwSwapBuffers(s_window);
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
-    glfwSwapBuffers(s_window);
 
     return true;
 }

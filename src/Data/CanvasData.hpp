@@ -2,6 +2,7 @@
 #define COFFEE_CANVAS_DATA_HPP
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 namespace coffee
 {
@@ -14,7 +15,7 @@ public:
     static CanvasData &get() 
     { 
         static CanvasData instance;
-        return instance; 
+        return instance;
     };
 };
 

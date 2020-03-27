@@ -7,7 +7,7 @@ using namespace coffee;
 int main()
 {
     context::init();
-    shaderSystem::setShader("default.vert.glsl", "default.frag.glsl");
+    shaderSystem::setShader("shaders/default.vert.glsl", "shaders/default.frag.glsl");
     renderer::init();
 
     while (context::update()) {
