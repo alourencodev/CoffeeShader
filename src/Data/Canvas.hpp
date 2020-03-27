@@ -1,5 +1,5 @@
-#ifndef COFFEE_CANVAS_DATA_HPP
-#define COFFEE_CANVAS_DATA_HPP
+#ifndef COFFEE_CANVAS_HPP
+#define COFFEE_CANVAS_HPP
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -7,14 +7,14 @@
 namespace coffee
 {
 
-class CanvasData
+class Canvas
 {
 public:
     GLuint shaderProgram;
 
-    static CanvasData &get() 
+    static Canvas &get() 
     { 
-        static CanvasData data;
+        static Canvas data;
         return data;
     };
 };

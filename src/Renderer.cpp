@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
-#include "Data/CanvasData.hpp"
+#include "Data/Canvas.hpp"
 #include "Data/Shapes.hpp"
 #include "Context.hpp"
 
@@ -21,7 +21,6 @@ static glm::mat4 s_mvp;
 
 void init()
 {
-
     glGenVertexArrays(1, &s_cubeVao);
     glBindVertexArray(s_cubeVao);
     {
@@ -34,7 +33,7 @@ void init()
 
         glEnableVertexAttribArray(k_shaderPositionIndex);
         glVertexAttribPointer(k_shaderPositionIndex,
-                              3, 
+                              3,
                               GL_FLOAT, 
                               GL_FALSE, 
                               3 * sizeof(GLfloat), 
@@ -59,8 +58,8 @@ void init()
 
 void draw()
 {
-    glad_glUseProgram(CanvasData::get().shaderProgram);
-    glad_glUniformMatrix4fv(glad_glGetUniformLocation(CanvasData::get().shaderProgram, "mvp"), 1, GL_FALSE, &s_mvp[0][0]);
+    glUseProgram(Canvas::get().shaderProgram);
+    glUniformMatrix4fv(glad_glGetUniformLocation(Canvas::get().shaderProgram, "mvp"), 1, GL_FALSE, &s_mvp[0][0]);
     glBindVertexArray(s_cubeVao);
     glDrawArrays(GL_TRIANGLES, 0, shapes::k_cube.size() / 3);
     glBindVertexArray(0);
