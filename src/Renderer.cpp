@@ -7,7 +7,7 @@
 
 #include "Data/CanvasData.hpp"
 #include "Data/Shapes.hpp"
-#
+#include "Context.hpp"
 
 namespace coffee::renderer
 {
@@ -16,6 +16,8 @@ static const GLuint k_shaderPositionIndex = 0;
 
 static GLuint s_cubeVao;
 static GLuint s_cubeVbo;
+
+static glm::mat4 s_mvp;
 
 void init()
 {
@@ -42,15 +44,23 @@ void init()
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glm::mat4 view = glm::lookAt(glm::vec3(4.0f, 3.0f, 3.0f),
+                                 glm::vec3(0.0f, 0.0f, 0.0f),
+                                 glm::vec3(0.0f, 1.0f, 0.0f));
+
+    auto windowSize = context::ContextData::get().windowSize;
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
+                                            static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y),
+                                            0.1f, 100.0f);
+
+    s_mvp = projection * view * glm::mat4(1.0f);
 }
 
 void draw()
 {
-    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -10.0f),
-                                 glm::vec3(0.0f, 0.0f, 0.0f),
-                                 glm::vec3(0.0f, 1.0f, 0.0f));
     glad_glUseProgram(CanvasData::get().shaderProgram);
-    glad_glUniformMatrix4fv(glad_glGetUniformLocation(CanvasData::get().shaderProgram, "mvp"), 1, GL_FALSE, &view[0][0]);
+    glad_glUniformMatrix4fv(glad_glGetUniformLocation(CanvasData::get().shaderProgram, "mvp"), 1, GL_FALSE, &s_mvp[0][0]);
     glBindVertexArray(s_cubeVao);
     glDrawArrays(GL_TRIANGLES, 0, shapes::k_cube.size() / 3);
     glBindVertexArray(0);

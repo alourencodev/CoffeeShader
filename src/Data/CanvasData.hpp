@@ -14,8 +14,8 @@ public:
 
     static CanvasData &get() 
     { 
-        static CanvasData instance;
-        return instance;
+        static CanvasData data;
+        return data;
     };
 };
 
