@@ -5,25 +5,21 @@
 
 struct GLFWwindow;
 
-namespace coffee::context
+namespace coffee
 {
 
-class ContextData
+class Context
 {
 public:
     GLFWwindow *window;
     glm::ivec2 windowSize;
 
-    static ContextData &get()
+    static Context &get()
     {
-        static ContextData data = {};
+        static Context data = {};
         return data;
     }
 };
-
-void init();
-bool update();
-void terminate();
 
 }
 

@@ -1,10 +1,12 @@
-#include "Context.hpp"
+#include "ContextSystem.hpp"
 
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-namespace coffee::context
+#include "Data/Context.hpp"
+
+namespace coffee::system::context
 {
 
 static const char k_windowTitle[] = "Coffee Shader";
@@ -32,8 +34,8 @@ void init()
     }
 
     glfwMakeContextCurrent(window);
-    ContextData::get().window = window;
-    ContextData::get().windowSize =  glm::ivec2(s_windowWidth, s_windowHeight);
+    Context::get().window = window;
+    Context::get().windowSize =  glm::ivec2(s_windowWidth, s_windowHeight);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cerr << "ERROR Failed to initialize OpenGL context" << std::endl;
@@ -46,7 +48,7 @@ void init()
 
 bool update()
 {
-    GLFWwindow *window = ContextData::get().window;
+    GLFWwindow *window = Context::get().window;
     if (glfwWindowShouldClose(window)) {
         return false;
     }
@@ -60,7 +62,7 @@ bool update()
 
 void terminate()
 {
-    glfwDestroyWindow(ContextData::get().window);
+    glfwDestroyWindow(Context::get().window);
     glfwTerminate();
 }
 

@@ -7,7 +7,7 @@
 
 #include "Data/Canvas.hpp"
 #include "Data/Shapes.hpp"
-#include "Context.hpp"
+#include "Data/Context.hpp"
 
 namespace coffee::renderer
 {
@@ -48,7 +48,7 @@ void init()
                                  glm::vec3(0.0f, 0.0f, 0.0f),
                                  glm::vec3(0.0f, 1.0f, 0.0f));
 
-    auto windowSize = context::ContextData::get().windowSize;
+    auto windowSize = Context::get().windowSize;
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
                                             static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y),
                                             0.1f, 100.0f);
