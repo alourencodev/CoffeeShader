@@ -7,9 +7,10 @@
 
 #include "Data/Canvas.hpp"
 #include "Data/Shapes.hpp"
-#include "Data/Context.hpp"
 
-namespace coffee::renderer
+#include "Window.hpp"
+
+namespace coffee
 {
 
 static const GLuint k_shaderPositionIndex = 0; 
@@ -19,7 +20,7 @@ static GLuint s_cubeVbo;
 
 static glm::mat4 s_mvp;
 
-void init()
+void initRenderer(const WindowInfo &windowInfo)
 {
     glGenVertexArrays(1, &s_cubeVao);
     glBindVertexArray(s_cubeVao);
@@ -48,7 +49,7 @@ void init()
                                  glm::vec3(0.0f, 0.0f, 0.0f),
                                  glm::vec3(0.0f, 1.0f, 0.0f));
 
-    auto windowSize = Context::get().windowSize;
+    auto windowSize = windowInfo.size;
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
                                             static_cast<float>(windowSize.x) / static_cast<float>(windowSize.y),
                                             0.1f, 100.0f);
