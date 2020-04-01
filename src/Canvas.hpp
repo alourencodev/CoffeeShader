@@ -11,7 +11,7 @@ struct Canvas
     Camera camera = {};
 };
 
-void initCanvas();
+Canvas initCanvas(const glm::ivec2 &windowSize);
 void drawCanvas();
 void terminateCanvas();
 

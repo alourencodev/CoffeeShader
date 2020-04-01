@@ -6,19 +6,17 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.hpp"
+#include "Constants.hpp"
 #include "Window.hpp"
 
 namespace coffee
 {
 
-void initRenderer(const WindowInfo &windowInfo)
-{
-
-}
-
 Canvas initCanvas(const glm::ivec2 &windowSize)
 {
-    glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+    using namespace constants::canvas;
+
+    glClearColor(k_clearColor.r, k_clearColor.g, k_clearColor.b, 1.0f);
 
     Canvas canvas = {};
     canvas.camera = initCamera(windowSize);

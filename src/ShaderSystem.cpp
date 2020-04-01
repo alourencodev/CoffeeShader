@@ -5,8 +5,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "Data/Canvas.hpp"
-
 namespace coffee::shaderSystem
 {
 
@@ -80,7 +78,7 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
 
     GLuint programID = linkProgram(vertShaderId, fragShaderId);
 
-    Canvas::get().shaderProgram = programID;
+    // Canvas::get().shaderProgram = programID;
 }
     
 }

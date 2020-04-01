@@ -2,21 +2,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Utils/Math.hpp"
-#include "Window.hpp"
+#include "Constants.hpp"
 
 namespace coffee
 {
 
-static const glm::vec3 k_position = {4.0f, 3.0f, 3.0f};
-static const glm::vec3 k_up = {0.0f, 1.0f, 0.0f};
-
-constexpr float k_fieldOfView = utils::math::degreeToRadian(45.0f);
-constexpr float k_near = 0.1f;
-constexpr float k_far = 100.0f;
-
 Camera initCamera(const glm::ivec2 &windowSize)
 {
+    using namespace constants::camera;
+
     Camera camera = {};
     camera.view = glm::lookAt(k_position, glm::vec3(0.0f), k_up);
 

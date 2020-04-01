@@ -1,28 +1,27 @@
 #include <GLFW/glfw3.h>
 
 #include "Canvas.hpp"
+#include "Constants.hpp"
 #include "ShaderSystem.hpp"
 #include "Window.hpp"
 
 using namespace coffee;
 
-constexpr char k_windowTitle[] = "Coffee Shader";
-static const glm::ivec2 s_windowSize = {2560, 1440};
-
 static GLFWwindow *s_window;
+static Canvas s_canvas = {};
 
 int main()
 {
     auto init = []() -> void
     {
         WindowInfo windowInfo = {};
-        windowInfo.title = k_windowTitle;
-        windowInfo.size = s_windowSize;
+        windowInfo.title = constants::window::k_title;
+        windowInfo.size = constants::window::k_size;
 
         s_window = initWindow(windowInfo);
 
         shaderSystem::setShader("shaders/default.glsl.vert", "shaders/default.glsl.frag");
-        initCanvas();
+        s_canvas = initCanvas(windowInfo.size);
     };
 
     auto update = []() -> void
