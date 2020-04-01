@@ -1,7 +1,7 @@
 #include <GLFW/glfw3.h>
 
+#include "Canvas.hpp"
 #include "ShaderSystem.hpp"
-#include "Renderer.hpp"
 #include "Window.hpp"
 
 using namespace coffee;
@@ -22,18 +22,20 @@ int main()
         s_window = initWindow(windowInfo);
 
         shaderSystem::setShader("shaders/default.glsl.vert", "shaders/default.glsl.frag");
-        initRenderer(windowInfo);
+        initCanvas();
     };
 
     auto update = []() -> void
     {
         while (!glfwWindowShouldClose(s_window)) {
             glfwPollEvents();
+            drawCanvas();
         }
     };
 
     auto terminate = []() -> void
     {
+        terminateCanvas();
         glfwDestroyWindow(s_window);
         glfwTerminate();
     };
