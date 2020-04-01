@@ -2,7 +2,6 @@
 
 #include "Canvas.hpp"
 #include "Constants.hpp"
-#include "ShaderSystem.hpp"
 #include "Window.hpp"
 
 using namespace coffee;
@@ -19,22 +18,21 @@ int main()
         windowInfo.size = constants::window::k_size;
 
         s_window = initWindow(windowInfo);
-
-        shaderSystem::setShader("shaders/default.glsl.vert", "shaders/default.glsl.frag");
         s_canvas = initCanvas(windowInfo.size);
     };
 
     auto update = []() -> void
     {
         while (!glfwWindowShouldClose(s_window)) {
+            glfwSwapBuffers(s_window);
             glfwPollEvents();
-            drawCanvas();
+            drawCanvas(s_canvas);
         }
     };
 
     auto terminate = []() -> void
     {
-        terminateCanvas();
+        terminateCanvas(s_canvas);
         glfwDestroyWindow(s_window);
         glfwTerminate();
     };

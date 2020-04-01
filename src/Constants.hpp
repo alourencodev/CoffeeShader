@@ -2,6 +2,7 @@
 #define COFFEE_CONSTANTS_HPP
 
 #include <glm/glm.hpp>
+#include <string>
 
 #include "Utils/Math.hpp"
 
@@ -20,6 +21,8 @@ namespace canvas
 {
 
 static const glm::vec3 k_clearColor = {0.8f, 0.8f, 0.8f};
+constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
+constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
 
 }
 

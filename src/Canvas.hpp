@@ -9,11 +9,12 @@ namespace coffee
 struct Canvas
 {
     Camera camera = {};
+    unsigned shaderProgram;
 };
 
 Canvas initCanvas(const glm::ivec2 &windowSize);
-void drawCanvas();
-void terminateCanvas();
+void drawCanvas(const Canvas &canvas);
+void terminateCanvas(const Canvas &canvas);
 
 }
 

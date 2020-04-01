@@ -1,14 +1,14 @@
-#include "ShaderSystem.hpp"
+#include "ShaderLoader.hpp"
 
 #include <fstream> 
 #include <glad/glad.h>
 #include <iostream>
 #include <sstream>
 
-namespace coffee::shaderSystem
+namespace coffee
 {
 
-void setShader(const std::string &vertexDir, const std::string &fragmentDir)
+unsigned loadShader(const std::string &vertexDir, const std::string &fragmentDir)
 {
     auto loadShader = [](const std::string &dir) -> std::string
     {
@@ -78,7 +78,10 @@ void setShader(const std::string &vertexDir, const std::string &fragmentDir)
 
     GLuint programID = linkProgram(vertShaderId, fragShaderId);
 
-    // Canvas::get().shaderProgram = programID;
+    glDeleteShader(vertShaderId);
+    glDeleteShader(fragShaderId);
+
+    return programID;
 }
     
 }
