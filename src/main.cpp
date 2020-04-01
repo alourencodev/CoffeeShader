@@ -16,6 +16,7 @@ int main()
         WindowInfo windowInfo = {};
         windowInfo.title = constants::window::k_title;
         windowInfo.size = constants::window::k_size;
+        windowInfo.isResizable = true;
 
         s_window = initWindow(windowInfo);
         s_canvas = initCanvas(windowInfo.size);

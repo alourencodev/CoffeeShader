@@ -13,14 +13,14 @@ namespace window
 {
 
 constexpr char k_title[] = "Coffee Shader";
-static const glm::ivec2 k_size = {2560, 1440};
+static const glm::ivec2 k_size = {1920, 1080};
 
 }
 
 namespace canvas
 {
 
-static const glm::vec3 k_clearColor = {0.8f, 0.8f, 0.8f};
+static const glm::vec3 k_clearColor = {0.2f, 0.2f, 0.2f};
 constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
 constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
 
