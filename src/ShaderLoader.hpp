@@ -6,7 +6,13 @@
 namespace coffee
 {
 
-unsigned loadShader(const std::string &vertexDir, const std::string &fragmentDir);
+struct Shader
+{
+    unsigned programId;
+    unsigned mvpIndex;
+};
+
+Shader loadShader(const std::string &vertexDir, const std::string &fragmentDir);
 
 }
 

@@ -38,6 +38,13 @@ constexpr float k_far = 100.0f;
 
 }
 
+namespace shader
+{
+
+constexpr char k_mvpUniform[] = "uMVP";
+
+}
+
 } 
 
 #endif

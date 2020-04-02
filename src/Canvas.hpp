@@ -3,6 +3,7 @@
 
 #include "Camera.hpp"
 #include "MeshLoader.hpp"
+#include "ShaderLoader.hpp"
 
 namespace coffee
 {
@@ -11,7 +12,7 @@ struct Canvas
 {
     Camera camera = {};
     Mesh mesh = {};
-    unsigned shaderProgram;
+    Shader shader = {};
 };
 
 Canvas initCanvas(const glm::ivec2 &windowSize);

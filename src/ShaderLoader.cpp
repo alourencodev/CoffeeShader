@@ -5,10 +5,12 @@
 #include <iostream>
 #include <sstream>
 
+#include "Constants.hpp"
+
 namespace coffee
 {
 
-unsigned loadShader(const std::string &vertexDir, const std::string &fragmentDir)
+Shader loadShader(const std::string &vertexDir, const std::string &fragmentDir)
 {
     auto loadShader = [](const std::string &dir) -> std::string
     {
@@ -76,12 +78,14 @@ unsigned loadShader(const std::string &vertexDir, const std::string &fragmentDir
     GLuint vertShaderId = compileShader(GL_VERTEX_SHADER, vertSource);
     GLuint fragShaderId = compileShader(GL_FRAGMENT_SHADER, fragSource);
 
-    GLuint programID = linkProgram(vertShaderId, fragShaderId);
+    Shader shader = {};
+    shader.programId = linkProgram(vertShaderId, fragShaderId);
+    shader.mvpIndex = glGetUniformLocation(shader.programId, constants::shader::k_mvpUniform);
 
     glDeleteShader(vertShaderId);
     glDeleteShader(fragShaderId);
 
-    return programID;
+    return shader;
 }
     
 }
