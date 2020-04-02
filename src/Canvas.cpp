@@ -7,6 +7,7 @@
 
 #include "Camera.hpp"
 #include "Constants.hpp"
+#include "Data/Shapes.hpp"
 #include "ShaderLoader.hpp"
 #include "Window.hpp"
 
@@ -22,6 +23,7 @@ Canvas initCanvas(const glm::ivec2 &windowSize)
     Canvas canvas = {};
     canvas.camera = initCamera(windowSize);
     canvas.shaderProgram = loadShader(k_defaultVertexShaderDir, k_defaultFragmentShaderDir);
+    canvas.mesh = createMesh(shapes::k_cube);
 
     glUseProgram(canvas.shaderProgram);
 
@@ -30,21 +32,16 @@ Canvas initCanvas(const glm::ivec2 &windowSize)
 
 void drawCanvas(const Canvas &canvas)
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // glUniformMatrix4fv(glad_glGetUniformLocation(Canvas::get().shaderProgram, "mvp"), 1, GL_FALSE, &s_mvp[0][0]);
-    // glBindVertexArray(s_cubeVao);
-    // glDrawArrays(GL_TRIANGLES, 0, shapes::k_cube.size() / 3);
-    // glBindVertexArray(0);
+    glad_glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glad_glBindVertexArray(canvas.mesh.vao);
+    glad_glDrawArrays(GL_TRIANGLES, 0, canvas.mesh.vertexCount);
+    glad_glBindVertexArray(0);   // CHECK: Is this needed?
 }
 
 void terminateCanvas(const Canvas &canvas)
 {
     glDeleteProgram(canvas.shaderProgram);
-    // glBindVertexArray(s_cubeVao);
-    // glDisableVertexAttribArray(k_shaderPositionIndex);
-    // glDeleteBuffers(1, &s_cubeVbo);
-    // glBindVertexArray(0);
-    // glDeleteVertexArrays(1, &s_cubeVao);
+    cleanMesh(canvas.mesh);
 }
 
 }

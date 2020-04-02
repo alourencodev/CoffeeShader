@@ -2,6 +2,7 @@
 #define COFFEE_CANVAS_HPP
 
 #include "Camera.hpp"
+#include "MeshLoader.hpp"
 
 namespace coffee
 {
@@ -9,6 +10,7 @@ namespace coffee
 struct Canvas
 {
     Camera camera = {};
+    Mesh mesh = {};
     unsigned shaderProgram;
 };
 
