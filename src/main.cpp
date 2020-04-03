@@ -2,6 +2,7 @@
 
 #include "Canvas.hpp"
 #include "Constants.hpp"
+#include "InputSystem.hpp"
 #include "Window.hpp"
 
 using namespace coffee;
@@ -20,6 +21,8 @@ int main()
 
         s_window = initWindow(windowInfo);
         s_canvas = initCanvas(windowInfo.size);
+
+        initInputSystem(s_window);
     };
 
     auto update = []() -> void
