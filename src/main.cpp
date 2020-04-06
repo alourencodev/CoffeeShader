@@ -22,7 +22,7 @@ int main()
         s_window = initWindow(windowInfo);
         s_canvas = initCanvas(windowInfo.size);
 
-        initInputSystem(s_window);
+        input::initInputSystem(s_window);
     };
 
     auto update = []() -> void

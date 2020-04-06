@@ -6,22 +6,15 @@
 
 class GLFWwindow;
 
-namespace coffee
+namespace coffee::input
 {
 
 using eventFunction = std::function<void()>;
-using eventHandle = uint16_t; //TODO: Turn this into strongly typed handler
-
-struct KeyEvent
-{
-    uint16_t key;
-    uint16_t action;
-    eventFunction function;
-};
+using eventHandle = uint32_t; //TODO: Turn this into strongly typed handler
 
 void initInputSystem(GLFWwindow *window);
-void registerMouseEvent(KeyEvent event) noexcept;
-void unregisterMouseEvent(KeyEvent event);
+eventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept;
+void unregisterMouseEvent(uint32_t button, uint32_t action, eventHandle handle);
 glm::vec2 mousePosition();
 
 }
