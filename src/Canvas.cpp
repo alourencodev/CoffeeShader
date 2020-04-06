@@ -31,12 +31,15 @@ Canvas initCanvas(const glm::ivec2 &windowSize)
 
 void drawCanvas(const Canvas &canvas)
 {
+    // CHECK: If this can only be set when needed
+    auto view = glm::lookAt(canvas.camera.position, glm::vec3(0.0f), constants::axis::k_right);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glm::mat4 mvp = canvas.camera.projection * canvas.camera.view;
+    glm::mat4 mvp = canvas.camera.projection * view;
     glUniformMatrix4fv(canvas.shader.mvpIndex, 1, GL_FALSE, &mvp[0][0]);
     glBindVertexArray(canvas.mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, canvas.mesh.vertexCount);
-    glBindVertexArray(0);   // CHECK: Is this needed?
+    glBindVertexArray(0);   // CHECK: if this is needed?
 }
 
 void terminateCanvas(const Canvas &canvas)

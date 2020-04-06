@@ -3,6 +3,7 @@
 #include "Canvas.hpp"
 #include "Constants.hpp"
 #include "InputSystem.hpp"
+#include "TrackballSystem.hpp"
 #include "Window.hpp"
 
 using namespace coffee;
@@ -23,6 +24,7 @@ int main()
         s_canvas = initCanvas(windowInfo.size);
 
         input::initInputSystem(s_window);
+        initTrackball(s_canvas.camera);
     };
 
     auto update = []() -> void
@@ -30,6 +32,7 @@ int main()
         while (!glfwWindowShouldClose(s_window)) {
             glfwSwapBuffers(s_window);
             glfwPollEvents();
+            updateTrackball();      // TODO: Update this with a fixed framerate
             drawCanvas(s_canvas);
         }
     };
