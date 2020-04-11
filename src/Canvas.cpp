@@ -32,7 +32,7 @@ Canvas initCanvas(const glm::ivec2 &windowSize)
 void drawCanvas(const Canvas &canvas)
 {
     // CHECK: If this can only be set when needed
-    auto view = glm::lookAt(canvas.camera.position, glm::vec3(0.0f), constants::axis::k_right);
+    auto view = glm::lookAt(canvas.camera.position, glm::vec3(0.0f), constants::axis::k_up);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glm::mat4 mvp = canvas.camera.projection * view;

@@ -26,12 +26,12 @@ void updateCamera()
     auto deltaPosition = mousePosition - s_lastMousePosition;
     s_lastMousePosition = mousePosition;
 
-    float yaw = deltaPosition.x * k_rotationSpeed;
-    float pitch = deltaPosition.y * k_rotationSpeed;
+    float yaw = -deltaPosition.x * k_rotationSpeed;
+    float pitch = -deltaPosition.y * k_rotationSpeed;
 
     // FIXME: Avoid Gimbal lock
-    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, pitch, constants::axis::k_up);
-    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, yaw, constants::axis::k_right);
+    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, pitch, constants::axis::k_right);
+    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, yaw, constants::axis::k_up);
 }
 
 void initTrackball(Camera &camera)
