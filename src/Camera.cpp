@@ -4,10 +4,10 @@
 
 #include "Constants.hpp"
 
-namespace coffee
+namespace coffee::camera
 {
 
-Camera initCamera(const glm::ivec2 &windowSize)
+Camera create(const glm::ivec2 &windowSize)
 {
     using namespace constants::camera;
 
@@ -18,6 +18,12 @@ Camera initCamera(const glm::ivec2 &windowSize)
     camera.projection = glm::perspective(k_fieldOfView, screenRatio, k_near, k_far);
 
     return camera;
+}
+
+glm::mat4 viewProjection(const Camera &camera)
+{
+    auto view = glm::lookAt(camera.position, glm::vec3(0.0f), constants::axis::k_up);
+    return camera.projection * view;
 }
 
 }

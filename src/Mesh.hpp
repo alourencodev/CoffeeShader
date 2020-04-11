@@ -1,5 +1,5 @@
-#ifndef COFFEE_MESH_LOADER_HPP
-#define COFFEE_MESH_LOADER_HPP
+#ifndef COFFEE_MESH_HPP
+#define COFFEE_MESH_HPP
 
 #include <cstdint>
 #include <vector>
@@ -14,8 +14,13 @@ struct Mesh
     uint32_t vertexCount;
 };
 
-Mesh createMesh(const std::vector<float> &vertices);
-void cleanMesh(const Mesh &mesh);
+namespace mesh
+{
+
+Mesh create(const std::vector<float> &vertices);
+void clean(const Mesh &mesh);
+
+}
 
 }
 

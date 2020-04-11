@@ -1,23 +1,21 @@
 #ifndef COFFEE_CANVAS_HPP
 #define COFFEE_CANVAS_HPP
 
-#include "Camera.hpp"
-#include "MeshLoader.hpp"
-#include "ShaderLoader.hpp"
+#include <glm/glm.hpp>
 
 namespace coffee
 {
 
-struct Canvas
-{
-    Camera camera = {};
-    Mesh mesh = {};
-    Shader shader = {};
-};
+struct Mesh;
+struct Shader;
 
-Canvas initCanvas(const glm::ivec2 &windowSize);
-void drawCanvas(const Canvas &canvas);
-void terminateCanvas(const Canvas &canvas);
+namespace canvas
+{
+
+void init();
+void draw(const Mesh &mesh, const Shader &shader, const glm::mat4 &mvp);
+
+}
 
 }
 

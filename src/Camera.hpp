@@ -12,7 +12,13 @@ struct Camera
     glm::mat4 projection;
 };
 
-Camera initCamera(const glm::ivec2 &windowSize);
+namespace camera
+{
+
+Camera create(const glm::ivec2 &windowSize);
+glm::mat4 viewProjection(const Camera &camera);
+
+}
 
 }
 

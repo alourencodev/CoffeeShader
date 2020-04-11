@@ -6,17 +6,17 @@
 
 struct GLFWwindow;
 
-namespace coffee
+namespace coffee::window
 {
 
-struct WindowInfo
+struct Info
 {
     std::string title = "";
     glm::ivec2 size = {800, 600};
     bool isResizable = false;
 };
 
-GLFWwindow *initWindow(const WindowInfo &info);
+GLFWwindow *create(const Info &info);
 
 }
 

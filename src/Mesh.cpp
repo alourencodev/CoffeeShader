@@ -1,14 +1,14 @@
-#include "MeshLoader.hpp"
+#include "Mesh.hpp"
 
 #include <glad/glad.h>
 
-namespace coffee
+namespace coffee::mesh
 {
 
 constexpr uint32_t k_positionAttribIndex = 0;
 constexpr uint32_t k_vertexSize = 3 * sizeof(GLfloat);
 
-Mesh createMesh(const std::vector<float> &vertices)
+Mesh create(const std::vector<float> &vertices)
 {
     Mesh mesh = {};
     glGenVertexArrays(1, &mesh.vao);
@@ -27,7 +27,7 @@ Mesh createMesh(const std::vector<float> &vertices)
     return mesh;
 }
 
-void cleanMesh(const Mesh &mesh)
+void clean(const Mesh &mesh)
 {
     glBindVertexArray(mesh.vao);
     glDisableVertexAttribArray(k_positionAttribIndex);

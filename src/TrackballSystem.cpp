@@ -11,7 +11,7 @@
 #include "Constants.hpp"
 #include "InputSystem.hpp"
 
-namespace coffee
+namespace coffee::trackball
 {
 
 constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate
@@ -19,7 +19,7 @@ constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate
 static std::function<void()> s_updateFunction = []() -> void {};
 static glm::ivec2 s_lastMousePosition;
 
-void initTrackball(Camera &camera)
+void init(Camera &camera)
 {
     std::function<void()> updateCameraRotation = [&camera]() -> void
     {
@@ -50,7 +50,7 @@ void initTrackball(Camera &camera)
     input::registerMouseEvent(GLFW_MOUSE_BUTTON_LEFT, GLFW_RELEASE, onRelease);
 }
 
-void updateTrackball()
+void update()
 {
     // CHECK: if it's better to call an empty lambda or make a null check?
     s_updateFunction();

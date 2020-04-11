@@ -28,7 +28,7 @@ static glm::ivec2 s_mousePosition = {};
 static std::unique_ptr<MouseEventTable> s_mouseEventTable;
 static eventHandle s_currentEventHandle = 0;
 
-void initInputSystem(GLFWwindow *window)
+void init(GLFWwindow *window)
 {
     s_mouseEventTable = std::make_unique<MouseEventTable>();
 

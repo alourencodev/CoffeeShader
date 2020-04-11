@@ -12,7 +12,7 @@ namespace coffee::input
 using eventFunction = std::function<void()>;
 using eventHandle = uint32_t; //TODO: Turn this into strongly typed handler
 
-void initInputSystem(GLFWwindow *window);
+void init(GLFWwindow *window);
 eventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept;
 void unregisterMouseEvent(uint32_t button, uint32_t action, eventHandle handle);
 glm::vec2 mousePosition();

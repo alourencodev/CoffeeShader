@@ -4,10 +4,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-namespace coffee
+namespace coffee::window
 {
 
-GLFWwindow *initWindow(const WindowInfo &info)
+GLFWwindow *create(const Info &info)
 {
     if (!glfwInit()) {
         std::cerr << "ERROR Loading GLFW" << std::endl;

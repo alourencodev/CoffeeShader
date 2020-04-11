@@ -6,8 +6,13 @@ namespace coffee
 
 struct Camera;
 
-void initTrackball(Camera &camera);
-void updateTrackball();
+namespace trackball
+{
+
+void init(Camera &camera);
+void update();
+
+}
 
 }
 

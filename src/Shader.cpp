@@ -1,4 +1,4 @@
-#include "ShaderLoader.hpp"
+#include "Shader.hpp"
 
 #include <fstream> 
 #include <glad/glad.h>
@@ -7,10 +7,10 @@
 
 #include "Constants.hpp"
 
-namespace coffee
+namespace coffee::shader
 {
 
-Shader loadShader(const std::string &vertexDir, const std::string &fragmentDir)
+Shader create(const std::string &vertexDir, const std::string &fragmentDir)
 {
     auto loadShader = [](const std::string &dir) -> std::string
     {
@@ -88,4 +88,14 @@ Shader loadShader(const std::string &vertexDir, const std::string &fragmentDir)
     return shader;
 }
     
+void use(unsigned programId)
+{
+    glUseProgram(programId);
+}
+
+void terminate(const Shader &shader)
+{
+    glDeleteProgram(shader.programId);
+}
+
 }
