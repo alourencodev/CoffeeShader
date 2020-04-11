@@ -18,30 +18,26 @@ constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate
 
 static std::function<void()> s_updateFunction = []() -> void {};
 static glm::ivec2 s_lastMousePosition;
-static Camera *s_registeredCamera = nullptr;
-
-void updateCamera()
-{
-    glm::ivec2 mousePosition = input::mousePosition();
-    auto deltaPosition = mousePosition - s_lastMousePosition;
-    s_lastMousePosition = mousePosition;
-
-    float yaw = -deltaPosition.x * k_rotationSpeed;
-    float pitch = -deltaPosition.y * k_rotationSpeed;
-
-    // FIXME: Avoid Gimbal lock
-    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, pitch, constants::axis::k_right);
-    s_registeredCamera->position = glm::rotate(s_registeredCamera->position, yaw, constants::axis::k_up);
-}
 
 void initTrackball(Camera &camera)
 {
-    // TODO: Check a better solution for this
-    s_registeredCamera = &camera;
-
-    auto onPress = []() -> void
+    std::function<void()> updateCameraRotation = [&camera]() -> void
     {
-        s_updateFunction = updateCamera;
+        glm::ivec2 mousePosition = input::mousePosition();
+        auto deltaPosition = mousePosition - s_lastMousePosition;
+        s_lastMousePosition = mousePosition;
+
+        float yaw = -deltaPosition.x * k_rotationSpeed;
+        float pitch = -deltaPosition.y * k_rotationSpeed;
+
+        // FIXME: Avoid Gimbal lock
+        camera.position = glm::rotate(camera.position, pitch, constants::axis::k_right);
+        camera.position = glm::rotate(camera.position, yaw, constants::axis::k_up);
+    };
+
+    auto onPress = [updateCameraRotation]() -> void
+    {
+        s_updateFunction = updateCameraRotation;
         s_lastMousePosition = input::mousePosition();
     };
 
