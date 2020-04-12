@@ -1,11 +1,7 @@
 #include "TrackballSystem.hpp"
 
-// FIXME: Get an alternative for this anoying thing!!
-#define GLM_ENABLE_EXPERIMENTAL
-
 #include <GLFW/glfw3.h>
 #include <functional>
-#include <glm/gtx/rotate_vector.hpp>
 
 #include "Camera.hpp"
 #include "Constants.hpp"
@@ -14,7 +10,7 @@
 namespace coffee::trackball
 {
 
-constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate
+constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate after calling update with a fixed rate
 
 static std::function<void()> s_updateFunction = []() -> void {};
 static glm::ivec2 s_lastMousePosition;
@@ -30,9 +26,8 @@ void init(Camera &camera)
         float yaw = -deltaPosition.x * k_rotationSpeed;
         float pitch = -deltaPosition.y * k_rotationSpeed;
 
-        // FIXME: Avoid Gimbal lock
-        camera.position = glm::rotate(camera.position, pitch, constants::axis::k_right);
-        camera.position = glm::rotate(camera.position, yaw, constants::axis::k_up);
+        auto rotationQuat = glm::angleAxis(pitch, constants::axis::k_right) * glm::angleAxis(yaw, constants::axis::k_up);
+        camera.rotation = camera.rotation * rotationQuat;
     };
 
     auto onPress = [updateCameraRotation]() -> void

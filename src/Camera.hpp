@@ -2,6 +2,7 @@
 #define COFFEE_CAMERA_HPP
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 namespace coffee
 {
@@ -9,7 +10,11 @@ namespace coffee
 struct Camera
 {
     glm::vec3 position;
-    glm::mat4 projection;
+    glm::quat rotation;
+    float fieldOfView;
+    float aspectRatio;
+    float near;
+    float far;
 };
 
 namespace camera
