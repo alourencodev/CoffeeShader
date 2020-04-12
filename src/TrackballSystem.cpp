@@ -10,7 +10,7 @@
 namespace coffee::trackball
 {
 
-constexpr float k_rotationSpeed = 0.01f; // TODO: Calibrate after calling update with a fixed rate
+constexpr float k_rotationSpeed = 0.005f;
 
 static std::function<void()> s_updateFunction = []() -> void {};
 static glm::ivec2 s_lastMousePosition;

@@ -1,5 +1,8 @@
 #include <GLFW/glfw3.h>
 
+#include <chrono>
+#include <iostream> // TRASH
+
 #include "Camera.hpp"
 #include "Canvas.hpp"
 #include "Constants.hpp"
@@ -10,6 +13,9 @@
 #include "Window.hpp"
 
 using namespace coffee; 
+using namespace std::chrono;
+
+constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 
 static GLFWwindow *s_window;
 static Camera s_camera = {};
@@ -38,12 +44,14 @@ int main()
 
     auto update = []() -> void
     {
-        while (!glfwWindowShouldClose(s_window)) {
-            glfwSwapBuffers(s_window);
-            glfwPollEvents();
-            canvas::draw(s_mesh, s_shader, camera::viewProjection(s_camera));
-            trackball::update();      // TODO: Update this with a fixed framerate
-        }
+        glfwSwapBuffers(s_window);
+        glfwPollEvents();
+        canvas::draw(s_mesh, s_shader, camera::viewProjection(s_camera));
+    };
+
+    auto fixedUpdate = []() -> void
+    {
+        trackball::update();
     };
 
     auto terminate = []() -> void
@@ -55,7 +63,18 @@ int main()
     };
 
     init();
-    update();
+
+    auto lastTime = steady_clock::now();
+    while (!glfwWindowShouldClose(s_window)) {
+        update();
+
+        auto now = steady_clock::now();
+        if (duration_cast<milliseconds>(now - lastTime).count() > k_millisecsPerFrame) {
+            fixedUpdate();
+            lastTime = now;
+        }        
+    }
+    
     terminate();
 
     return 0;
