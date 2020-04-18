@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 #include "Canvas.hpp"
 #include "Constants.hpp"
+#include "FileWatcher.hpp"
 #include "InputSystem.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
@@ -24,7 +25,15 @@ static Shader s_shader = {};
 
 int main()
 {
-    auto init = []() -> void
+    std::function<void()> recreateShader = []() -> void
+    {
+        Shader tempShader = s_shader;
+        s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
+        shader::use(s_shader.programId);
+        shader::terminate(tempShader);
+    };
+
+    auto init = [recreateShader]() -> void
     {
         window::Info windowInfo = {};
         windowInfo.title = constants::window::k_title;
@@ -35,6 +44,8 @@ int main()
         s_camera = camera::create(windowInfo.size);
         s_mesh = mesh::create(constants::shapes::k_cube);
         s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
+        fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
+        fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
         shader::use(s_shader.programId);
 
         input::init(s_window);
@@ -52,6 +63,7 @@ int main()
     auto fixedUpdate = []() -> void
     {
         trackball::update();
+        fileWatcher::poll();
     };
 
     auto terminate = []() -> void
