@@ -16,7 +16,7 @@ namespace shader
 {
 
 Shader create(const std::string &vertexDir, const std::string &fragmentDir);
-void use(unsigned programId);
+void use(const Shader &shader);
 void terminate(const Shader &shader);
 
 }

@@ -85,9 +85,9 @@ Shader create(const std::string &vertexDir, const std::string &fragmentDir)
     return shader;
 }
     
-void use(unsigned programId)
+void use(const Shader &shader)
 {
-    glUseProgram(programId);
+    glUseProgram(shader.programId);
 }
 
 void terminate(const Shader &shader)

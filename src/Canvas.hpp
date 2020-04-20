@@ -3,17 +3,26 @@
 
 #include <glm/glm.hpp>
 
+#include "Camera.hpp"
+#include "Mesh.hpp"
+#include "Shader.hpp"
+
 namespace coffee
 {
 
-struct Mesh;
-struct Shader;
+struct Canvas
+{
+    Camera camera;
+    Mesh mesh;
+    Shader shader;
+};
 
 namespace canvas
 {
 
-void init();
-void draw(const Mesh &mesh, const Shader &shader, const glm::mat4 &mvp);
+Canvas create(const glm::ivec2 &windowSize);
+void draw(const Canvas &canvas);
+void terminate(const Canvas &canvas);
 
 }
 

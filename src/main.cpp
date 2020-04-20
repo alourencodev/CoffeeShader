@@ -2,13 +2,10 @@
 
 #include <chrono>
 
-#include "Camera.hpp"
 #include "Canvas.hpp"
 #include "Constants.hpp"
 #include "FileWatcher.hpp"
 #include "InputSystem.hpp"
-#include "Mesh.hpp"
-#include "Shader.hpp"
 #include "TrackballSystem.hpp"
 #include "Window.hpp"
 
@@ -18,17 +15,15 @@ using namespace std::chrono;
 constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 
 static GLFWwindow *s_window;
-static Camera s_camera = {};
-static Mesh s_mesh = {};
-static Shader s_shader = {};
+static Canvas s_canvas = {};
 
 static void init()
 {
     std::function<void()> recreateShader = []() -> void
     {
-        Shader tempShader = s_shader;
-        s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
-        shader::use(s_shader.programId);
+        Shader tempShader = s_canvas.shader;
+        s_canvas.shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
+        shader::use(s_canvas.shader);
         shader::terminate(tempShader);
     };
 
@@ -37,22 +32,21 @@ static void init()
     windowInfo.size = constants::window::k_size;
     windowInfo.isResizable = true;
     s_window = window::create(windowInfo);
-    s_camera = camera::create(windowInfo.size);
-    s_mesh = mesh::create(constants::shapes::k_cube);
-    s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
+    s_canvas = canvas::create(windowInfo.size);
+
+    input::init(s_window);
+    trackball::init(s_canvas.camera);           // After input init
+
+    // TODO: Move this to another place
     fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
     fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
-    shader::use(s_shader.programId);
-    input::init(s_window);
-    canvas::init();
-    trackball::init(s_camera);
 }
 
 static void update()
 {
     glfwSwapBuffers(s_window);
     glfwPollEvents();
-    canvas::draw(s_mesh, s_shader, camera::viewProjection(s_camera));
+    canvas::draw(s_canvas);
 }
 
 static void fixedUpdate()
@@ -63,8 +57,7 @@ static void fixedUpdate()
 
 static void terminate()
 {
-    shader::terminate(s_shader);
-    mesh::clean(s_mesh);
+    canvas::terminate(s_canvas);
     glfwDestroyWindow(s_window);
     glfwTerminate();
 }
