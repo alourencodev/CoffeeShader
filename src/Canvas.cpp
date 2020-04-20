@@ -24,7 +24,6 @@ void draw(const Mesh &mesh, const Shader &shader, const glm::mat4 &mvp)
     glUniformMatrix4fv(shader.mvpIndex, 1, GL_FALSE, &mvp[0][0]);
     glBindVertexArray(mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
-    glBindVertexArray(0);   // CHECK: if this is needed?
 }
 
 }

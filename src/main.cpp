@@ -1,7 +1,6 @@
 #include <GLFW/glfw3.h>
 
 #include <chrono>
-#include <iostream> // TRASH
 
 #include "Camera.hpp"
 #include "Canvas.hpp"
@@ -23,7 +22,7 @@ static Camera s_camera = {};
 static Mesh s_mesh = {};
 static Shader s_shader = {};
 
-int main()
+static void init()
 {
     std::function<void()> recreateShader = []() -> void
     {
@@ -33,47 +32,45 @@ int main()
         shader::terminate(tempShader);
     };
 
-    auto init = [recreateShader]() -> void
-    {
-        window::Info windowInfo = {};
-        windowInfo.title = constants::window::k_title;
-        windowInfo.size = constants::window::k_size;
-        windowInfo.isResizable = true;
+    window::Info windowInfo = {};
+    windowInfo.title = constants::window::k_title;
+    windowInfo.size = constants::window::k_size;
+    windowInfo.isResizable = true;
+    s_window = window::create(windowInfo);
+    s_camera = camera::create(windowInfo.size);
+    s_mesh = mesh::create(constants::shapes::k_cube);
+    s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
+    fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
+    fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
+    shader::use(s_shader.programId);
+    input::init(s_window);
+    canvas::init();
+    trackball::init(s_camera);
+}
 
-        s_window = window::create(windowInfo);
-        s_camera = camera::create(windowInfo.size);
-        s_mesh = mesh::create(constants::shapes::k_cube);
-        s_shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
-        fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
-        fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
-        shader::use(s_shader.programId);
+static void update()
+{
+    glfwSwapBuffers(s_window);
+    glfwPollEvents();
+    canvas::draw(s_mesh, s_shader, camera::viewProjection(s_camera));
+}
 
-        input::init(s_window);
-        canvas::init();
-        trackball::init(s_camera);
-    };
+static void fixedUpdate()
+{
+    trackball::update();
+    fileWatcher::poll();
+}
 
-    auto update = []() -> void
-    {
-        glfwSwapBuffers(s_window);
-        glfwPollEvents();
-        canvas::draw(s_mesh, s_shader, camera::viewProjection(s_camera));
-    };
+static void terminate()
+{
+    shader::terminate(s_shader);
+    mesh::clean(s_mesh);
+    glfwDestroyWindow(s_window);
+    glfwTerminate();
+}
 
-    auto fixedUpdate = []() -> void
-    {
-        trackball::update();
-        fileWatcher::poll();
-    };
-
-    auto terminate = []() -> void
-    {
-        shader::terminate(s_shader);
-        mesh::clean(s_mesh);
-        glfwDestroyWindow(s_window);
-        glfwTerminate();
-    };
-
+int main()
+{
     init();
 
     auto lastTime = steady_clock::now();
