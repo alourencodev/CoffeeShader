@@ -8,7 +8,10 @@
 namespace coffee::fileWatcher
 {
 
-void watch(std::string dir, std::function<void()> event);
+using WatchHandle = uint32_t;   // TODO: Make this hardly typed
+
+WatchHandle watch(const std::string &dir, std::function<void()> event);
+void unwatch(WatchHandle handle);
 void poll();
 
 }
