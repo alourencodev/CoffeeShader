@@ -19,17 +19,16 @@ constexpr char k_logTag[] = "InputSystem";
 
 struct Event
 {
-    eventHandle handle;
+    EventHandle handle;
     eventFunction function;
 
     bool operator == (const Event &other) const { return handle == other.handle; }
 };
 
-using MouseEventTable = matrix<std::vector<Event>, GLFW_MOUSE_BUTTON_LAST, GLFW_REPEAT>;
+using MouseEventTable = matrix<std::vector<Event>, GLFW_MOUSE_BUTTON_LAST, GLFW_REPEAT>;    // GLFW_REPEATE is the last action integer
 
 static glm::ivec2 s_mousePosition = {};
 static std::unique_ptr<MouseEventTable> s_mouseEventTable;
-static eventHandle s_currentEventHandle = 0;
 
 void init(GLFWwindow *window)
 {
@@ -46,17 +45,21 @@ void init(GLFWwindow *window)
             event.function();
         }
     });
-
 }
 
-eventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept
+EventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept
 {
-    Event event = {s_currentEventHandle, function};
+    static uint16_t s_currentEventHandleCounter = 0;
+
+    const auto handle = EventHandle(s_currentEventHandleCounter);
+    Event event = {handle, function};
     s_mouseEventTable->at(button, action).emplace_back(std::move(event));
-    return s_currentEventHandle++;
+    s_currentEventHandleCounter++;
+
+    return handle;
 }
 
-void unregisterMouseEvent(uint32_t button, uint32_t action, eventHandle handle)
+void unregisterMouseEvent(uint32_t button, uint32_t action, EventHandle handle)
 {
     auto &eventArray = s_mouseEventTable->at(button, action);
     Event findEvent = {handle, []() -> void {}};
