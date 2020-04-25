@@ -4,15 +4,18 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Utils/Log.hpp"
+
 namespace coffee::window
 {
+
+constexpr char k_logTag[] = "Window";
 
 GLFWwindow *create(const Info &info)
 {
     if (!glfwInit()) {
-        std::cerr << "ERROR Loading GLFW" << std::endl;
         glfwTerminate();
-        std::exit(1);
+        logFatal(k_logTag, "Unable to initialize GLFW.");
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -22,17 +25,15 @@ GLFWwindow *create(const Info &info)
 
     GLFWwindow *window = glfwCreateWindow(info.size.x, info.size.y, info.title.c_str(), NULL, NULL);
     if (!window) {
-        std::cerr << "ERROR Creating GL Context" << std::endl;
         glfwTerminate();
-        std::exit(1);
+        logFatal(k_logTag, "Unable to create GL Context.");
     }
 
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        std::cerr << "ERROR Failed to initialize OpenGL context" << std::endl;
         glfwTerminate();
-        std::exit(1);
+        logFatal(k_logTag, "Unable to initialize GL Context.");
     }
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);

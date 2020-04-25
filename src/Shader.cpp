@@ -6,18 +6,21 @@
 #include <sstream>
 
 #include "Constants.hpp"
+#include "Utils/Log.hpp"
 
 namespace coffee::shader
 {
+
+constexpr char k_logTag[] = "Shader";
 
 static std::string loadShader(const std::string &dir)
 {
     std::ifstream file(dir);
         
     if (!file.is_open()) {
-        std::cerr << "ERROR Unable to open file " << dir << "!" << std::endl;
-        std::exit(1);
+        logFatal(k_logTag, "Unable to open file %s.", dir);
     }
+
     std::stringstream buffer;
     buffer << file.rdbuf();
 
@@ -39,8 +42,7 @@ static GLuint compileShader(GLenum shaderType, const std::string &source)
     if (success == GL_FALSE)
     {
     	glGetShaderInfoLog(shaderId, sizeof(error), NULL, error);
-    	std::cerr << "Error Compiling shader:\n" << error << std::endl;
-        std::exit(1);
+        logError(k_logTag, "Shader compilation error:\n%s", error);
     }
 
     return shaderId;
@@ -60,8 +62,7 @@ static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
     if (success == GL_FALSE)
     {
     	glGetProgramInfoLog(programID, sizeof(error), NULL, error);
-    	std::cerr << "Error Linking shader program:\n" << error << std::endl;
-        std::exit(1);
+        logError(k_logTag, "Shader program linking error:\n%s", error);
     }
 
     return programID;

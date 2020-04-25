@@ -9,10 +9,13 @@
 
 #include "Canvas.hpp"
 #include "Utils/Containers.hpp"
+#include "Utils/Log.hpp"
 #include "Utils/Matrix.hpp"
 
 namespace coffee::input
 {
+
+constexpr char k_logTag[] = "InputSystem";
 
 struct Event
 {
@@ -63,7 +66,7 @@ void unregisterMouseEvent(uint32_t button, uint32_t action, eventHandle handle)
         return;
     }
 
-    // TODO: WARN
+    logWarning(k_logTag, "Can't unregister event %d from action %d and button %d", handle, action, button);
 }
 
 glm::vec2 mousePosition()
