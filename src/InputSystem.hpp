@@ -18,7 +18,7 @@ using eventFunction = std::function<void()>;
 void init(GLFWwindow *window);
 EventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept;
 void unregisterMouseEvent(uint32_t button, uint32_t action, EventHandle handle);
-glm::vec2 mousePosition();
+const glm::vec2 mousePosition();
 
 }
 

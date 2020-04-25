@@ -72,7 +72,7 @@ void unregisterMouseEvent(uint32_t button, uint32_t action, EventHandle handle)
     logWarning(k_logTag, "Can't unregister event %d from action %d and button %d", handle, action, button);
 }
 
-glm::vec2 mousePosition()
+const glm::vec2 mousePosition()
 {
     return s_mousePosition;
 }
