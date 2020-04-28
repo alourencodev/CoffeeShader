@@ -5,6 +5,7 @@
 #include "Canvas.hpp"
 #include "Constants.hpp"
 #include "FileWatcher.hpp"
+#include "Gui.hpp"
 #include "InputSystem.hpp"
 #include "TrackballSystem.hpp"
 #include "Window.hpp"
@@ -36,6 +37,7 @@ static void init()
 
     input::init(s_window);
     trackball::init(s_canvas.camera);           // After input init
+    gui::init(s_window);
 
     // TODO: Move this to another place
     fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
@@ -44,9 +46,12 @@ static void init()
 
 static void update()
 {
-    glfwSwapBuffers(s_window);
     glfwPollEvents();
+ 
     canvas::draw(s_canvas);
+    gui::draw();
+
+    glfwSwapBuffers(s_window);
 }
 
 static void fixedUpdate()
@@ -57,6 +62,7 @@ static void fixedUpdate()
 
 static void terminate()
 {
+    gui::terminate();
     canvas::terminate(s_canvas);
     glfwDestroyWindow(s_window);
     glfwTerminate();
