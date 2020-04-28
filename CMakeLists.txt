@@ -20,7 +20,7 @@ file(GLOB_RECURSE SRC src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC})
 
-target_link_libraries(${PROJECT_NAME} glfw glad glm)
+target_link_libraries(${PROJECT_NAME} glfw glad glm imgui)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_compile_options(${PROJECT_NAME} PRIVATE ${COMPILE_OPTIONS})
 target_compile_features(${PROJECT_NAME} PRIVATE ${COMPILE_FEATURES})
