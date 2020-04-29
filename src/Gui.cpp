@@ -3,18 +3,31 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <functional>
+#include <vector>
 
 namespace coffee::gui
 {
 
 constexpr char k_glslVersion[] = "#version 410";
 
-void init(GLFWwindow *window)
+static std::vector<std::function<void()>> s_activeGUIDrawFunction; 
+
+void drawShaderEditor()
 {
+    ImGui::Begin("Inspector");
+    ImGui::End();
+}
+
+void init(GLFWwindow *window)
+{   
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(k_glslVersion);
+        
+        s_activeGUIDrawFunction.reserve(4);
+        s_activeGUIDrawFunction.emplace_back(drawShaderEditor);
 }
 
 void draw()
@@ -23,7 +36,9 @@ void draw()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    // TODO: Draw gui here
+    for (auto drawFunction : s_activeGUIDrawFunction) {
+        drawFunction();
+    }
 
     ImGui::Render();
  
