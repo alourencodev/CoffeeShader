@@ -37,7 +37,7 @@ static void init()
 
     input::init(s_window);
     trackball::init(s_canvas.camera);           // After input init
-    gui::init(s_window);
+    gui::init(s_window, &s_canvas);
 
     // TODO: Move this to another place
     fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);

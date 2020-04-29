@@ -6,6 +6,8 @@
 #include <functional>
 #include <vector>
 
+#include "Canvas.hpp"
+
 namespace coffee::gui
 {
 
@@ -13,19 +15,22 @@ constexpr char k_glslVersion[] = "#version 410";
 
 static std::vector<std::function<void()>> s_activeGUIDrawFunction; 
 
+static Canvas *s_canvas = nullptr;
+
 void drawShaderEditor()
 {
     ImGui::Begin("Inspector");
     ImGui::End();
 }
 
-void init(GLFWwindow *window)
+void init(GLFWwindow *window, Canvas *canvas)
 {   
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(k_glslVersion);
-        
+
+        s_canvas = canvas;
         s_activeGUIDrawFunction.reserve(4);
         s_activeGUIDrawFunction.emplace_back(drawShaderEditor);
 }

@@ -3,12 +3,18 @@
 
 class GLFWwindow;
 
-namespace coffee::gui
+namespace coffee
 {
 
-void init(GLFWwindow *window);
+struct Canvas;
+namespace gui
+{
+
+void init(GLFWwindow *window, Canvas *canvas);
 void draw();
 void terminate();
+
+}
 
 }
 
