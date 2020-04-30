@@ -24,11 +24,6 @@ constexpr float k_near = 0.1f;
 constexpr float k_far = 100.0f;
 }
 
-namespace shader
-{
-constexpr char k_mvpUniform[] = "uMVP";
-}
-
 namespace axis
 {
 static const glm::vec3 k_up = {0.0f, 1.0f, 0.0f};

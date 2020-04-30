@@ -20,6 +20,11 @@ static Canvas *s_canvas = nullptr;
 void drawShaderEditor()
 {
     ImGui::Begin("Inspector");
+
+    for (auto uniform : s_canvas->shader.uniforms) {
+        ImGui::Text("%s", uniform.name.c_str());
+    }
+
     ImGui::End();
 }
 

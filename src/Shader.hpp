@@ -2,14 +2,21 @@
 #define COFFEE_SHADER_HPP
 
 #include <string>
+#include <vector>
 
 namespace coffee
 {
+
+struct Uniform
+{
+    std::string name;
+};
 
 struct Shader
 {
     unsigned programId;
     unsigned mvpIndex;
+    std::vector<Uniform> uniforms;
 };
 
 namespace shader

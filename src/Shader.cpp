@@ -12,6 +12,8 @@ namespace coffee::shader
 {
 
 constexpr char k_logTag[] = "Shader";
+constexpr char k_mvpUniform[] = "uMVP";
+constexpr GLsizei k_maxUniformNameLength = 64;
 
 static std::string loadShader(const std::string &dir)
 {
@@ -68,6 +70,28 @@ static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
     return programID;
 }
 
+auto queryUniforms(GLuint programId)
+{
+    GLint count;
+    glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &count);
+
+    std::vector<Uniform> uniformList;
+    uniformList.reserve(count);
+
+    for (GLuint i = 0; i < count; i++) {
+        GLchar buffer[k_maxUniformNameLength];
+        GLsizei length;
+        GLint size;
+        GLenum type;
+
+        glGetActiveUniform(programId, i, k_maxUniformNameLength, &length, &size, &type, buffer);
+        Uniform uniform = {std::string(buffer)};
+        uniformList.emplace_back(uniform);
+    }
+
+    return uniformList;
+}
+
 Shader create(const std::string &vertexDir, const std::string &fragmentDir)
 {
     std::string vertSource = loadShader(vertexDir);
@@ -78,7 +102,8 @@ Shader create(const std::string &vertexDir, const std::string &fragmentDir)
 
     Shader shader = {};
     shader.programId = linkProgram(vertShaderId, fragShaderId);
-    shader.mvpIndex = glGetUniformLocation(shader.programId, constants::shader::k_mvpUniform);
+    shader.mvpIndex = glGetUniformLocation(shader.programId, k_mvpUniform);
+    shader.uniforms = queryUniforms(shader.programId);
 
     glDeleteShader(vertShaderId);
     glDeleteShader(fragShaderId);
