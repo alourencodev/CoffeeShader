@@ -80,12 +80,11 @@ auto queryUniforms(GLuint programId)
 
     for (GLuint i = 0; i < count; i++) {
         GLchar buffer[k_maxUniformNameLength];
-        GLsizei length;
-        GLint size;
         GLenum type;
 
+        GLsizei length, size; // Dummies
         glGetActiveUniform(programId, i, k_maxUniformNameLength, &length, &size, &type, buffer);
-        Uniform uniform = {std::string(buffer)};
+        Uniform uniform = {std::string(buffer), type};
         uniformList.emplace_back(uniform);
     }
 

@@ -10,6 +10,7 @@ namespace coffee
 struct Uniform
 {
     std::string name;
+    unsigned type; // GLenum
 };
 
 struct Shader
