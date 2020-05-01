@@ -12,39 +12,40 @@
 namespace coffee::gui
 {
 
-static float _;     // TRASH: This is temporaryk
-
 constexpr char k_glslVersion[] = "#version 410";
-constexpr float k_valueEditorDragSpeed = 1.0f;
+constexpr float k_valueEditorDragSpeed = 0.1f;
 
 static std::vector<std::function<void()>> s_activeGUIDrawFunction;
 static Canvas *s_canvas = nullptr;
 
-#define VALUE_EDITOR(imgui_call, cast_type) [](const char *label, void *value) -> void \
+// CHECK If there is a better way to do this without macros
+#define TYPE_EDITOR(imgui_call, cast_type)  [](const char *label, void *value) -> void \
                                             { \
                                                 ImGui::imgui_call(label, reinterpret_cast<cast_type *>(value), k_valueEditorDragSpeed); \
                                             }
 
-using TypeWidgetDrawFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
-static TypeWidgetDrawFunctionMap s_typeWidgetDrawMap = 
+using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
+static TypeEditorFunctionMap s_typeEditorMap = 
 {
-    {GL_INT,                VALUE_EDITOR(DragInt, int)},
-    {GL_INT_VEC2,           VALUE_EDITOR(DragInt2, int)},
-    {GL_INT_VEC3,           VALUE_EDITOR(DragInt3, int)},
-    {GL_INT_VEC4,           VALUE_EDITOR(DragInt4, int)},
-    {GL_FLOAT,              VALUE_EDITOR(DragFloat, float)},
-    {GL_FLOAT_VEC2,         VALUE_EDITOR(DragFloat2, float)},
-    {GL_FLOAT_VEC3,         VALUE_EDITOR(DragFloat3, float)},
-    {GL_FLOAT_VEC4,         VALUE_EDITOR(DragFloat4, float)}
+    {GL_INT,                TYPE_EDITOR(DragInt, int)},
+    {GL_INT_VEC2,           TYPE_EDITOR(DragInt2, int)},
+    {GL_INT_VEC3,           TYPE_EDITOR(DragInt3, int)},
+    {GL_INT_VEC4,           TYPE_EDITOR(DragInt4, int)},
+    {GL_FLOAT,              TYPE_EDITOR(DragFloat, float)},
+    {GL_FLOAT_VEC2,         TYPE_EDITOR(DragFloat2, float)},
+    {GL_FLOAT_VEC3,         TYPE_EDITOR(DragFloat3, float)},
+    {GL_FLOAT_VEC4,         TYPE_EDITOR(DragFloat4, float)}
 };
 
 static void drawShaderEditor()
 {
     ImGui::Begin("Inspector");
 
-    for (auto uniform : s_canvas->shader.uniforms) {
-        if (s_typeWidgetDrawMap.find(uniform.type) != s_typeWidgetDrawMap.end()) {
-            s_typeWidgetDrawMap[uniform.type](uniform.name.c_str(), &_ /* TODO: Set Value here */);
+    const auto &uniforms = s_canvas->shader.uniforms;
+    const auto &uniformNames = s_canvas->shader.uniformNames;
+    for (int i = 0; i < uniforms.size(); i++) { 
+        if (s_typeEditorMap.find(uniforms[i].type) != s_typeEditorMap.end()) {
+            s_typeEditorMap[uniforms[i].type](uniformNames[i].c_str(), uniforms[i].valuePtr);
         }
     }
 

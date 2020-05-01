@@ -30,6 +30,7 @@ void draw(const Canvas &canvas)
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUniformMatrix4fv(canvas.shader.mvpIndex, 1, GL_FALSE, &mvp[0][0]);
+    shader::updateUniforms(canvas.shader);
     glBindVertexArray(canvas.mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, canvas.mesh.vertexCount);
 }
