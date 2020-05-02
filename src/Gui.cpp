@@ -86,4 +86,9 @@ void terminate()
     ImGui::DestroyContext();
 }
 
+bool usedInput()
+{
+    return ImGui::GetIO().WantCaptureMouse;
+}
+
 }

@@ -1,11 +1,10 @@
 #include "InputSystem.hpp"
 
-#include <iostream>
-
+#include <array>
 #include <GLFW/glfw3.h>
-#include <vector>
 #include <memory>
 #include <utility>
+#include <vector>
 
 #include "Canvas.hpp"
 #include "Utils/Containers.hpp"
@@ -16,6 +15,12 @@ namespace coffee::input
 {
 
 constexpr char k_logTag[] = "InputSystem";
+
+struct ButtonActionPair
+{
+    int button;
+    int action;
+};
 
 struct Event
 {
@@ -28,7 +33,9 @@ struct Event
 using MouseEventTable = matrix<std::vector<Event>, GLFW_MOUSE_BUTTON_LAST, GLFW_REPEAT>;    // GLFW_REPEATE is the last action integer
 
 static glm::ivec2 s_mousePosition = {};
-static std::unique_ptr<MouseEventTable> s_mouseEventTable;
+static std::unique_ptr<MouseEventTable> s_mouseEventTable;      // CHECK: Why is this a pointer?
+static std::array<ButtonActionPair, 8> s_mouseEventQueue;
+static uint8_t s_lastMouseEventIndex = 0;
 
 void init(GLFWwindow *window)
 {
@@ -41,9 +48,7 @@ void init(GLFWwindow *window)
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow *, int button, int action, int) -> void
     {
-        for (auto &event : s_mouseEventTable->at(button, action)) {
-            event.function();
-        }
+        s_mouseEventQueue[s_lastMouseEventIndex++] = {button, action};
     });
 }
 
@@ -75,6 +80,23 @@ void unregisterMouseEvent(uint32_t button, uint32_t action, EventHandle handle)
 const glm::vec2 mousePosition()
 {
     return s_mousePosition;
+}
+
+void poll() noexcept
+{
+    for (int i = 0; i < s_lastMouseEventIndex; i++) {
+        auto input = s_mouseEventQueue[i];
+        for (auto &event : s_mouseEventTable->at(input.button, input.action)) {
+            event.function();
+        }
+    }
+
+    s_lastMouseEventIndex = 0;
+}
+
+void discardInput()
+{
+    s_lastMouseEventIndex = 0;
 }
 
 }

@@ -19,6 +19,8 @@ void init(GLFWwindow *window);
 EventHandle registerMouseEvent(uint32_t button, uint32_t action, eventFunction function) noexcept;
 void unregisterMouseEvent(uint32_t button, uint32_t action, EventHandle handle);
 const glm::vec2 mousePosition();
+void poll() noexcept;
+void discardInput();
 
 }
 

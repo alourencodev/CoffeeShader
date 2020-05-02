@@ -51,6 +51,12 @@ static void update()
     canvas::draw(s_canvas);
     gui::draw();
 
+    if (gui::usedInput()) {
+        input::discardInput();
+    } else {
+        input::poll();
+    }
+
     glfwSwapBuffers(s_window);
 }
 

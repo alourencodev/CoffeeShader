@@ -13,6 +13,7 @@ namespace gui
 void init(GLFWwindow *window, Canvas *canvas);
 void draw();
 void terminate();
+bool usedInput();
 
 }
 
