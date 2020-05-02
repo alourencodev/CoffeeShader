@@ -18,11 +18,11 @@ constexpr float k_valueEditorDragSpeed = 0.1f;
 static std::vector<std::function<void()>> s_activeGUIDrawFunction;
 static Canvas *s_canvas = nullptr;
 
-// CHECK If there is a better way to do this without macros
-#define TYPE_EDITOR(imgui_call, cast_type)  [](const char *label, void *value) -> void \
-                                            { \
-                                                ImGui::imgui_call(label, reinterpret_cast<cast_type *>(value), k_valueEditorDragSpeed); \
-                                            }
+#define TYPE_EDITOR(imgui_call, cast_type) \
+[](const char *label, void *value) -> void \
+{ \
+    ImGui::imgui_call(label, reinterpret_cast<cast_type *>(value), k_valueEditorDragSpeed); \
+}
 
 using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
 static TypeEditorFunctionMap s_typeEditorMap = 
@@ -37,7 +37,7 @@ static TypeEditorFunctionMap s_typeEditorMap =
     {GL_FLOAT_VEC4,         TYPE_EDITOR(DragFloat4, float)}
 };
 
-static void drawShaderEditor()
+static void drawInspector()
 {
     ImGui::Begin("Inspector");
 
@@ -61,7 +61,7 @@ void init(GLFWwindow *window, Canvas *canvas)
 
         s_canvas = canvas;
         s_activeGUIDrawFunction.reserve(4);
-        s_activeGUIDrawFunction.emplace_back(drawShaderEditor);
+        s_activeGUIDrawFunction.emplace_back(drawInspector);
 }
 
 void draw()

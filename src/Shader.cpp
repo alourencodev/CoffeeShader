@@ -20,46 +20,46 @@ constexpr GLsizei k_maxUniformNameLength = 64;
 
 // TODO: Check if it is reliable to use GL_MAX_UNIFORM_LOCATIONS
 // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml
-constexpr size_t k_maxUniformBytes = 128;
+constexpr size_t k_maxUniformBytes = 256;
 
-static std::array<char, k_maxUniformBytes> s_uniformValuesStack = {};
-static unsigned s_uniformStackPointer = 0;
+#define TYPE_UNIFORM(uniform_sufix, cast_type) \
+[](GLuint location, void *value) -> void \
+{ \
+    glUniform1 ## uniform_sufix(location, *reinterpret_cast<cast_type *>(value)); \
+}
 
-// CHECK if there is a better way to do this without macros
-#define TYPE_UNIFORM(uniform_sufix, cast_type)  [](GLuint location, void *value) -> void \
-                                                { \
-                                                    glUniform ## uniform_sufix(location, *reinterpret_cast<cast_type *>(value)); \
-                                                }
+#define TYPE_UNIFORM_2(uniform_sufix, cast_type) \
+[](GLuint location, void *value) -> void \
+{ \
+    auto castedValue = reinterpret_cast<cast_type *>(value); \
+    glUniform2 ## uniform_sufix(location, castedValue[0], castedValue[1]); \
+}
 
-#define TYPE_UNIFORM_2(uniform_sufix, cast_type)    [](GLuint location, void *value) -> void \
-                                                    { \
-                                                        auto castedValue = reinterpret_cast<cast_type *>(value); \
-                                                        glUniform ## uniform_sufix(location, castedValue[0], castedValue[1]); \
-                                                    }
+#define TYPE_UNIFORM_3(uniform_sufix, cast_type) \
+[](GLuint location, void *value) -> void \
+{ \
+    auto castedValue = reinterpret_cast<cast_type *>(value); \
+    glUniform3 ## uniform_sufix(location, castedValue[0], castedValue[1], castedValue[2]); \
+}
 
-#define TYPE_UNIFORM_3(uniform_sufix, cast_type)    [](GLuint location, void *value) -> void \
-                                                    { \
-                                                        auto castedValue = reinterpret_cast<cast_type *>(value); \
-                                                        glUniform ## uniform_sufix(location, castedValue[0], castedValue[1], castedValue[2]); \
-                                                    }
-
-#define TYPE_UNIFORM_4(uniform_sufix, cast_type)    [](GLuint location, void *value) -> void \
-                                                    { \
-                                                        auto castedValue = reinterpret_cast<cast_type *>(value); \
-                                                        glUniform ## uniform_sufix(location, castedValue[0], castedValue[1], castedValue[2], castedValue[3]); \
-                                                    }
+#define TYPE_UNIFORM_4(uniform_sufix, cast_type) \
+[](GLuint location, void *value) -> void \
+{ \
+    auto castedValue = reinterpret_cast<cast_type *>(value); \
+    glUniform4 ## uniform_sufix(location, castedValue[0], castedValue[1], castedValue[2], castedValue[3]); \
+}
 
 using TypeUniformFunctionMap = std::unordered_map<GLenum, std::function<void(GLuint, void *)>>;
 static TypeUniformFunctionMap s_uniformFunctionMap =
 {
-    {GL_INT,                TYPE_UNIFORM(1i, int)},
-    {GL_INT_VEC2,           TYPE_UNIFORM_2(2i, int)},
-    {GL_INT_VEC3,           TYPE_UNIFORM_3(3i, int)},
-    {GL_INT_VEC4,           TYPE_UNIFORM_4(4i, int)},
-    {GL_FLOAT,              TYPE_UNIFORM(1f, float)},
-    {GL_FLOAT_VEC2,         TYPE_UNIFORM_2(2f, float)},
-    {GL_FLOAT_VEC3,         TYPE_UNIFORM_3(3f, float)},
-    {GL_FLOAT_VEC4,         TYPE_UNIFORM_4(4f, float)},
+    {GL_INT,                TYPE_UNIFORM(i, int)},
+    {GL_INT_VEC2,           TYPE_UNIFORM_2(i, int)},
+    {GL_INT_VEC3,           TYPE_UNIFORM_3(i, int)},
+    {GL_INT_VEC4,           TYPE_UNIFORM_4(i, int)},
+    {GL_FLOAT,              TYPE_UNIFORM(f, float)},
+    {GL_FLOAT_VEC2,         TYPE_UNIFORM_2(f, float)},
+    {GL_FLOAT_VEC3,         TYPE_UNIFORM_3(f, float)},
+    {GL_FLOAT_VEC4,         TYPE_UNIFORM_4(f, float)},
 };
 
 static std::string loadShader(const std::string &dir)
@@ -119,6 +119,9 @@ static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
 
 void setupUniforms(Shader &shader)
 {
+    static std::array<char, k_maxUniformBytes> s_uniformValuesStack = {};
+    unsigned s_uniformStackPointer = 0;
+
     s_uniformStackPointer = 0;
     GLint count;
     glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORMS, &count);
