@@ -20,7 +20,7 @@ constexpr GLsizei k_maxUniformNameLength = 64;
 
 // TODO: Check if it is reliable to use GL_MAX_UNIFORM_LOCATIONS
 // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml
-constexpr size_t k_maxUniformBytes = 256;   // TODO: guard this for overflow
+constexpr size_t k_maxUniformBytes = 256;
 
 #define TYPE_UNIFORM(uniform_sufix, cast_type) \
 [](GLuint location, void *value) -> void \
@@ -145,6 +145,12 @@ void setupUniforms(Shader &shader)
             shader.uniforms.emplace_back(uniform);
             shader.uniformNames.emplace_back(name);
             s_uniformStackPointer += uniformBytes;
+
+            if (s_uniformStackPointer >= k_maxUniformBytes) {
+                logError(k_logTag, 
+                         "Unoform buffer overflow. Can't have more than %d total bytes within the editable uniforms", k_maxUniformBytes);
+                break;
+            }
         }
     }
 }
