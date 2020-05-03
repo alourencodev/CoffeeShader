@@ -39,7 +39,7 @@ static TypeEditorFunctionMap s_typeEditorMap =
 
 static void drawInspector()
 {
-    ImGui::Begin("Inspector");
+    ImGui::Begin("Uniform Editor");
 
     const auto &uniforms = s_canvas->shader.uniforms;
     const auto &uniformNames = s_canvas->shader.uniformNames;
