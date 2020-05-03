@@ -80,7 +80,7 @@ const glm::vec2 mousePosition()
     return s_mousePosition;
 }
 
-void poll() noexcept
+void poll()
 {
     for (int i = 0; i < s_lastMouseEventIndex; i++) {
         auto input = s_mouseEventQueue[i];
