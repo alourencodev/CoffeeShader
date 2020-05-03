@@ -34,12 +34,11 @@ void rawLog(LogSetting setting,
 #ifdef DEBUG
 #define logDebug(tag, ...) logger::rawLog(logger::k_debugLogSetting, __FILE__, __LINE__, tag, __VA_ARGS__)
 #else
-#define logDebug(tag, ...)
+#define logDebug(tag, ...) ;
 #endif
 
 #define logWarning(tag, ...) logger::rawLog(logger::k_warnLogSetting, __FILE__, __LINE__, tag, __VA_ARGS__)
 #define logError(tag, ...) logger::rawLog(logger::k_errorLogSetting, __FILE__, __LINE__, tag, __VA_ARGS__)
-#define logFatal(tag, ...) logger::rawLog(logger::k_fatalLogSetting, __FILE__, __LINE__, tag, __VA_ARGS__); \
-        std::exit(EXIT_FAILURE) 
+#define logFatal(tag, ...) { logger::rawLog(logger::k_fatalLogSetting, __FILE__, __LINE__, tag, __VA_ARGS__); std::exit(EXIT_FAILURE); }
 
 #endif
