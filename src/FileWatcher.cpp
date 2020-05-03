@@ -15,7 +15,7 @@ struct WatchedFile
 {
     std::filesystem::path path;
     std::filesystem::file_time_type lastModifiedTime;
-    uint32_t handle;
+    WatchHandle handle;
 };
 
 static std::vector<WatchedFile> s_watchedFiles;
@@ -24,7 +24,7 @@ static uint32_t s_currentIdCount = 0;
 
 WatchHandle watch(const std::string &dir, std::function<void()> event)
 {
-    WatchedFile file = {dir, std::filesystem::last_write_time(dir), s_currentIdCount++};
+    WatchedFile file = {dir, std::filesystem::last_write_time(dir), WatchHandle(s_currentIdCount++)};
     s_watchedFiles.emplace_back(file);
     s_onModifiedEvents.emplace_back(event);
     ASSERT(s_watchedFiles.size() == s_onModifiedEvents.size());

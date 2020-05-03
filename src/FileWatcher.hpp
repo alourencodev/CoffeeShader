@@ -5,10 +5,12 @@
 #include <functional>
 #include <string>
 
+#include "Utils/Handle.hpp"
+
 namespace coffee::fileWatcher
 {
 
-using WatchHandle = uint32_t;   // TODO: Make this hardly typed
+DEFINE_HANDLE(WatchHandle);
 
 WatchHandle watch(const std::string &dir, std::function<void()> event);
 void unwatch(WatchHandle handle);
