@@ -37,6 +37,28 @@ static TypeEditorFunctionMap s_typeEditorMap =
     {GL_FLOAT_VEC4,         TYPE_EDITOR(DragFloat4, float)}
 };
 
+// CHECK: Move this to own file
+static void drawToolbar()
+{
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("File")) {
+        if (ImGui::MenuItem("Open")) {
+            // TODO
+        }
+
+        ImGui::EndMenu();
+    } 
+    if (ImGui::BeginMenu("Help")) {
+        if (ImGui::MenuItem("About")) {
+            // TODO
+        }
+
+        ImGui::EndMenu();
+    }
+    
+    ImGui::EndMainMenuBar();
+}
+
 static void drawInspector()
 {
     ImGui::Begin("Uniform Editor");
@@ -62,6 +84,7 @@ void init(GLFWwindow *window, Canvas *canvas)
         s_canvas = canvas;
         s_activeGUIDrawFunction.reserve(4);
         s_activeGUIDrawFunction.emplace_back(drawInspector);
+        s_activeGUIDrawFunction.emplace_back(drawToolbar);
 }
 
 void draw()
