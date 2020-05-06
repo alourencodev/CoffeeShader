@@ -5,9 +5,12 @@
 #include <imgui_impl_opengl3.h>
 #include <functional>
 #include <glad/glad.h>
+#include <osdialog/osdialog.h>
 #include <vector>
 
 #include "Canvas.hpp"
+#include "Utils/Log.hpp"
+#include "Utils/File.hpp"
 
 namespace coffee::gui
 {
@@ -42,8 +45,17 @@ static void drawToolbar()
 {
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("File")) {
-        if (ImGui::MenuItem("Open")) {
-            // TODO
+
+        if (ImGui::BeginMenu("Open Shader")) {
+            if (ImGui::MenuItem("Vertex")) {
+                // TODO:
+            }
+
+            if (ImGui::MenuItem("Fragment")) {
+                // TODO:
+            }
+
+            ImGui::EndMenu();
         }
 
         ImGui::EndMenu();
