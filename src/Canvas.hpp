@@ -2,8 +2,10 @@
 #define COFFEE_CANVAS_HPP
 
 #include <glm/glm.hpp>
+#include <string>
 
 #include "Camera.hpp"
+#include "FileWatcher.hpp"
 #include "Mesh.hpp"
 #include "Shader.hpp"
 
@@ -17,12 +19,27 @@ struct Canvas
     Shader shader;
 };
 
+// TODO: Join this with canvas in a common access structure (not in the same structure for hot/cold purposes)
+struct CanvasDescriptor
+{
+    struct ShaderFile
+    {
+        std::string dir = "";
+        fileWatcher::WatchHandle watchHandle;
+    };
+
+    ShaderFile vertexFile;
+    ShaderFile fragmentFile;
+};
+
 namespace canvas
 {
 
 Canvas create(const glm::ivec2 &windowSize);
 void draw(const Canvas &canvas);
 void terminate(const Canvas &canvas);
+
+void setCanvasShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir);
 
 }
 

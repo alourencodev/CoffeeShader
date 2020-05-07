@@ -18,6 +18,9 @@ constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 static GLFWwindow *s_window;
 static Canvas s_canvas = {};
 
+// FIXME: This initialization is horrible. I need to get a better solution
+static CanvasDescriptor s_canvasDescriptor= {{"", fileWatcher::WatchHandle(0)},{"", fileWatcher::WatchHandle(0)}};
+
 static void init()
 {
     std::function<void()> recreateShader = []() -> void
@@ -37,11 +40,13 @@ static void init()
 
     input::init(s_window);
     trackball::init(s_canvas.camera);           // After input init
-    gui::init(s_window, &s_canvas);
+    gui::init(s_window, &s_canvas, &s_canvasDescriptor);
 
-    // TODO: Move this to another place
-    fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
-    fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
+    // TRASH: For test purposes
+    s_canvasDescriptor.vertexFile.dir = constants::k_defaultVertexShaderDir;
+    s_canvasDescriptor.fragmentFile.dir = constants::k_defaultFragmentShaderDir;
+    s_canvasDescriptor.vertexFile.watchHandle = fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
+    s_canvasDescriptor.fragmentFile.watchHandle = fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
 }
 
 static void update()

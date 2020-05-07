@@ -19,7 +19,7 @@ std::string openDialog()
     auto result = std::string(filename);
     free(filename); // TODO: Get a better way to manage this
 
-    return std::string(filename);
+    return result;
 }
 
 }

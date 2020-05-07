@@ -20,6 +20,7 @@ constexpr float k_valueEditorDragSpeed = 0.1f;
 
 static std::vector<std::function<void()>> s_activeGUIDrawFunction;
 static Canvas *s_canvas = nullptr;
+static CanvasDescriptor *s_canvasDescriptor = nullptr;
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
@@ -48,11 +49,13 @@ static void drawToolbar()
 
         if (ImGui::BeginMenu("Open Shader")) {
             if (ImGui::MenuItem("Vertex")) {
-                // TODO:
+                std::string dir = file::openDialog();
+                canvas::setCanvasShader(s_canvas, s_canvasDescriptor, dir, s_canvasDescriptor->fragmentFile.dir);
             }
 
             if (ImGui::MenuItem("Fragment")) {
-                // TODO:
+                std::string dir = file::openDialog();
+                canvas::setCanvasShader(s_canvas, s_canvasDescriptor, s_canvasDescriptor->vertexFile.dir, dir);
             }
 
             ImGui::EndMenu();
@@ -86,7 +89,7 @@ static void drawInspector()
     ImGui::End();
 }
 
-void init(GLFWwindow *window, Canvas *canvas)
+void init(GLFWwindow *window, Canvas *canvas, CanvasDescriptor *descriptor)
 {   
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
@@ -94,6 +97,7 @@ void init(GLFWwindow *window, Canvas *canvas)
         ImGui_ImplOpenGL3_Init(k_glslVersion);
 
         s_canvas = canvas;
+        s_canvasDescriptor = descriptor;
         s_activeGUIDrawFunction.reserve(4);
         s_activeGUIDrawFunction.emplace_back(drawInspector);
         s_activeGUIDrawFunction.emplace_back(drawToolbar);

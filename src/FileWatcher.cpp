@@ -22,6 +22,8 @@ static std::vector<WatchedFile> s_watchedFiles;
 static std::vector<std::function<void()>> s_onModifiedEvents; 
 static uint32_t s_currentIdCount = 0;
 
+// TODO: Reserve vectors on init
+
 WatchHandle watch(const std::string &dir, std::function<void()> event)
 {
     WatchedFile file = {dir, std::filesystem::last_write_time(dir), WatchHandle(s_currentIdCount++)};

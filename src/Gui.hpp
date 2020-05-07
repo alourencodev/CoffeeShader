@@ -7,10 +7,11 @@ namespace coffee
 {
 
 struct Canvas;
+struct CanvasDescriptor;
 namespace gui
 {
 
-void init(GLFWwindow *window, Canvas *canvas);
+void init(GLFWwindow *window, Canvas *canvas, CanvasDescriptor *descriptor);
 void draw();
 void terminate();
 bool usedInput();

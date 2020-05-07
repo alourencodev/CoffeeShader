@@ -41,4 +41,32 @@ void terminate(const Canvas &canvas)
     mesh::clean(canvas.mesh);
 }
 
+inline void loadShader(Canvas *canvas, const std::string &vertexDir, const std::string &fragmentDir)
+{
+    Shader tempShader = canvas->shader;
+    canvas->shader = shader::create(vertexDir, fragmentDir);
+    shader::use(canvas->shader);
+    shader::terminate(tempShader);
+}
+
+void setCanvasShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir)
+{
+    std::function<void()> reloadShader = [canvas, descriptor]() -> void
+    {
+        loadShader(canvas, descriptor->vertexFile.dir, descriptor->fragmentFile.dir);
+    };
+
+    loadShader(canvas, vertexDir, fragmentDir);
+
+    descriptor->vertexFile.dir = vertexDir;
+    descriptor->fragmentFile.dir = fragmentDir;
+
+    // TODO: Get a way to avoid redundant unwatches
+    fileWatcher::unwatch(descriptor->vertexFile.watchHandle);
+    fileWatcher::unwatch(descriptor->fragmentFile.watchHandle);
+
+    descriptor->vertexFile.watchHandle = fileWatcher::watch(vertexDir, reloadShader);
+    descriptor->fragmentFile.watchHandle = fileWatcher::watch(fragmentDir, reloadShader);
+}
+
 }
