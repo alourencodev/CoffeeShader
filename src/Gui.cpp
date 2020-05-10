@@ -18,7 +18,7 @@ namespace coffee::gui
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
 
-static std::vector<std::function<void()>> s_activeGUIDrawFunction;
+static std::vector<std::function<void()>> s_activeGUIShowFunctions;
 static Canvas *s_canvas = nullptr;
 static CanvasDescriptor *s_canvasDescriptor = nullptr;
 
@@ -41,8 +41,7 @@ static TypeEditorFunctionMap s_typeEditorMap =
     {GL_FLOAT_VEC4,         TYPE_EDITOR(DragFloat4, float)}
 };
 
-// CHECK: Move this to own file
-static void drawToolbar()
+static void showToolbar()
 {
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("File")) {
@@ -74,7 +73,7 @@ static void drawToolbar()
     ImGui::EndMainMenuBar();
 }
 
-static void drawInspector()
+static void showUniformInspector()
 {
     ImGui::Begin("Uniform Editor");
 
@@ -98,9 +97,9 @@ void init(GLFWwindow *window, Canvas *canvas, CanvasDescriptor *descriptor)
 
         s_canvas = canvas;
         s_canvasDescriptor = descriptor;
-        s_activeGUIDrawFunction.reserve(4);
-        s_activeGUIDrawFunction.emplace_back(drawInspector);
-        s_activeGUIDrawFunction.emplace_back(drawToolbar);
+        s_activeGUIShowFunctions.reserve(4);
+        s_activeGUIShowFunctions.emplace_back(showUniformInspector);
+        s_activeGUIShowFunctions.emplace_back(showToolbar);
 }
 
 void draw()
@@ -109,8 +108,8 @@ void draw()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    for (auto drawFunction : s_activeGUIDrawFunction) {
-        drawFunction();
+    for (auto showFunction : s_activeGUIShowFunctions) {
+        showFunction();
     }
 
     ImGui::Render();
