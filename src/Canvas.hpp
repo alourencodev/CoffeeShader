@@ -38,7 +38,7 @@ Canvas create(const glm::ivec2 &windowSize);
 void draw(const Canvas &canvas);
 void terminate(const Canvas &canvas);
 
-void setCanvasShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir);
+void setShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir);
 
 }
 

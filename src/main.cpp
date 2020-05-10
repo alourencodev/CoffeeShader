@@ -21,31 +21,17 @@ static CanvasDescriptor s_canvasDescriptor = {};
 
 static void init()
 {
-    std::function<void()> recreateShader = []() -> void
-    {
-        Shader tempShader = s_canvas.shader;
-        s_canvas.shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
-        shader::use(s_canvas.shader);
-        shader::terminate(tempShader);
-    };
-
     window::Info windowInfo = {};
     windowInfo.title = constants::window::k_title;
     windowInfo.size = constants::window::k_size;
     windowInfo.isResizable = true;
     s_window = window::create(windowInfo);
     s_canvas = canvas::create(windowInfo.size);
+    canvas::setShader(&s_canvas, &s_canvasDescriptor, constants::k_defaultVertexShaderDir,constants::k_defaultFragmentShaderDir);
 
     input::init(s_window);
     trackball::init(s_canvas.camera);           // After input init
     gui::init(s_window, &s_canvas, &s_canvasDescriptor);
-
-    // TRASH: For test purposes
-    
-    s_canvasDescriptor.vertexFile.dir = constants::k_defaultVertexShaderDir;
-    s_canvasDescriptor.fragmentFile.dir = constants::k_defaultFragmentShaderDir;
-    s_canvasDescriptor.vertexFile.watchHandle = fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
-    s_canvasDescriptor.fragmentFile.watchHandle = fileWatcher::watch(constants::k_defaultFragmentShaderDir, recreateShader);
 }
 
 static void update()

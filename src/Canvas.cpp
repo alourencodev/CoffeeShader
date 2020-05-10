@@ -18,8 +18,6 @@ Canvas create(const glm::ivec2 &windowSize)
     Canvas canvas = {};
     canvas.camera = camera::create(windowSize);
     canvas.mesh = mesh::create(constants::shapes::k_cube);
-    canvas.shader = shader::create(constants::k_defaultVertexShaderDir, constants::k_defaultFragmentShaderDir);
-    shader::use(canvas.shader);
 
     return canvas;
 }
@@ -49,7 +47,7 @@ inline void loadShader(Canvas *canvas, const std::string &vertexDir, const std::
     shader::terminate(tempShader);
 }
 
-void setCanvasShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir)
+void setShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir)
 {
     std::function<void()> reloadShader = [canvas, descriptor]() -> void
     {

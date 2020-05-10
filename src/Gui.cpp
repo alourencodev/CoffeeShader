@@ -49,12 +49,12 @@ static void showToolbar()
         if (ImGui::BeginMenu("Open Shader")) {
             if (ImGui::MenuItem("Vertex")) {
                 std::string dir = file::openDialog();
-                canvas::setCanvasShader(s_canvas, s_canvasDescriptor, dir, s_canvasDescriptor->fragmentFile.dir);
+                canvas::setShader(s_canvas, s_canvasDescriptor, dir, s_canvasDescriptor->fragmentFile.dir);
             }
 
             if (ImGui::MenuItem("Fragment")) {
                 std::string dir = file::openDialog();
-                canvas::setCanvasShader(s_canvas, s_canvasDescriptor, s_canvasDescriptor->vertexFile.dir, dir);
+                canvas::setShader(s_canvas, s_canvasDescriptor, s_canvasDescriptor->vertexFile.dir, dir);
             }
 
             ImGui::EndMenu();
