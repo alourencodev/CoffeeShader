@@ -1,6 +1,10 @@
 #ifndef COFFEE_HANDLE_HPP
 #define COFFEE_HANDLE_HPP
 
+#include <limits>
+
+#include "Utils/Assert.hpp"
+
 namespace coffee
 {
     
@@ -9,9 +13,14 @@ namespace coffee
 template<typename _>
 struct Handle
 {
-    explicit Handle(uint16_t v): value(v) {}
+    Handle() = default;
+    explicit Handle(uint16_t v)
+    {
+        ASSERT(v < std::numeric_limits<uint16_t>::max());
+        value = v;
+    }
 
-    uint16_t value;
+    uint16_t value = std::numeric_limits<uint16_t>::max();
 
     bool operator == (const Handle &other) const { return value == other.value; }
     explicit operator uint16_t() const { return value; }

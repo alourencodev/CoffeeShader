@@ -17,9 +17,7 @@ constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 
 static GLFWwindow *s_window;
 static Canvas s_canvas = {};
-
-// FIXME: This initialization is horrible. I need to get a better solution
-static CanvasDescriptor s_canvasDescriptor= {{"", fileWatcher::WatchHandle(0)},{"", fileWatcher::WatchHandle(0)}};
+static CanvasDescriptor s_canvasDescriptor = {};
 
 static void init()
 {
@@ -43,6 +41,7 @@ static void init()
     gui::init(s_window, &s_canvas, &s_canvasDescriptor);
 
     // TRASH: For test purposes
+    
     s_canvasDescriptor.vertexFile.dir = constants::k_defaultVertexShaderDir;
     s_canvasDescriptor.fragmentFile.dir = constants::k_defaultFragmentShaderDir;
     s_canvasDescriptor.vertexFile.watchHandle = fileWatcher::watch(constants::k_defaultVertexShaderDir, recreateShader);
