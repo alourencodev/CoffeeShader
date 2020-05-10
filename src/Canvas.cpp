@@ -61,7 +61,6 @@ void setCanvasShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::st
     descriptor->vertexFile.dir = vertexDir;
     descriptor->fragmentFile.dir = fragmentDir;
 
-    // TODO: Get a way to avoid redundant unwatches
     fileWatcher::unwatch(descriptor->vertexFile.watchHandle);
     fileWatcher::unwatch(descriptor->fragmentFile.watchHandle);
 

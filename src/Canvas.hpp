@@ -19,7 +19,6 @@ struct Canvas
     Shader shader;
 };
 
-// TODO: Join this with canvas in a common access structure (not in the same structure for hot/cold purposes)
 struct CanvasDescriptor
 {
     struct ShaderFile
