@@ -1,11 +1,8 @@
 #include "Shader.hpp"
 
 #include <array>
-#include <fstream>
 #include <functional>
 #include <glad/glad.h>
-#include <iostream>
-#include <sstream>
 
 #include "Constants.hpp"
 #include "Utils/GL.hpp"
@@ -61,20 +58,6 @@ static TypeUniformFunctionMap s_uniformFunctionMap =
     {GL_FLOAT_VEC3,         TYPE_UNIFORM_3(f, float)},
     {GL_FLOAT_VEC4,         TYPE_UNIFORM_4(f, float)},
 };
-
-static std::string loadShader(const std::string &dir)
-{
-    std::ifstream file(dir);
-        
-    if (!file.is_open()) {
-        logFatal(k_logTag, "Unable to open file %s.", dir);
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-
-    return buffer.str();
-}
 
 static GLuint compileShader(GLenum shaderType, const std::string &source)
 {
@@ -148,18 +131,15 @@ void setupUniforms(Shader &shader)
 
             if (s_uniformStackPointer >= k_maxUniformBytes) {
                 logError(k_logTag, 
-                         "Unoform buffer overflow. Can't have more than %d total bytes within the editable uniforms", k_maxUniformBytes);
+                         "Uniform buffer overflow. Can't have more than %d total bytes within the editable uniforms", k_maxUniformBytes);
                 break;
             }
         }
     }
 }
 
-Shader create(const std::string &vertexDir, const std::string &fragmentDir)
+Shader create(const std::string &vertSource, const std::string &fragSource)
 {
-    std::string vertSource = loadShader(vertexDir);
-    std::string fragSource = loadShader(fragmentDir);
-
     GLuint vertShaderId = compileShader(GL_VERTEX_SHADER, vertSource);
     GLuint fragShaderId = compileShader(GL_FRAGMENT_SHADER, fragSource);
 

@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Constants.hpp"
+#include "Utils/File.hpp"
 
 namespace coffee::canvas
 {
@@ -42,7 +43,9 @@ void terminate(const Canvas &canvas)
 inline void loadShader(Canvas *canvas, const std::string &vertexDir, const std::string &fragmentDir)
 {
     Shader tempShader = canvas->shader;
-    canvas->shader = shader::create(vertexDir, fragmentDir);
+    auto vertSource = file::load(vertexDir);
+    auto fragSource = file::load(fragmentDir);
+    canvas->shader = shader::create(vertSource, fragSource);
     shader::use(canvas->shader);
     shader::terminate(tempShader);
 }
