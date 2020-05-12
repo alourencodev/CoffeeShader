@@ -16,7 +16,7 @@ using namespace std::chrono;
 constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 
 static GLFWwindow *s_window;
-static Canvas s_canvas = {};
+static Canvas s_canvas = {}; 
 static CanvasDescriptor s_canvasDescriptor = {};
 
 static void init()
@@ -26,8 +26,11 @@ static void init()
     windowInfo.size = constants::window::k_size;
     windowInfo.isResizable = true;
     s_window = window::create(windowInfo);
-    s_canvas = canvas::create(windowInfo.size);
-    canvas::setShader(&s_canvas, &s_canvasDescriptor, constants::k_defaultVertexShaderDir,constants::k_defaultFragmentShaderDir);
+
+    // TODO: Have a better structure for this
+    auto pair = canvas::create(windowInfo.size);
+    s_canvas = pair.first;
+    s_canvasDescriptor = pair.second;
 
     input::init(s_window);
     trackball::init(s_canvas.camera);           // After input init

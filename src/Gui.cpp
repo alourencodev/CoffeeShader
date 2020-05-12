@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "Canvas.hpp"
+#include "Shader.hpp"
 #include "Utils/Log.hpp"
 #include "Utils/File.hpp"
 
@@ -49,12 +50,12 @@ static void showToolbar()
         if (ImGui::BeginMenu("Open Shader")) {
             if (ImGui::MenuItem("Vertex")) {
                 std::string dir = file::openDialog();
-                canvas::setShader(s_canvas, s_canvasDescriptor, dir, s_canvasDescriptor->fragmentFile.dir);
+                canvas::loadShader(s_canvas, s_canvasDescriptor, dir, ShaderStage::eVertex);
             }
 
             if (ImGui::MenuItem("Fragment")) {
                 std::string dir = file::openDialog();
-                canvas::setShader(s_canvas, s_canvasDescriptor, s_canvasDescriptor->vertexFile.dir, dir);
+                canvas::loadShader(s_canvas, s_canvasDescriptor, dir, ShaderStage::eFragment);
             }
 
             ImGui::EndMenu();

@@ -19,6 +19,7 @@ constexpr GLsizei k_maxUniformNameLength = 64;
 // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml
 constexpr size_t k_maxUniformBytes = 256;
 
+// TODO: Check a cleaner way to do this
 #define TYPE_UNIFORM(uniform_sufix, cast_type) \
 [](GLuint location, void *value) -> void \
 { \

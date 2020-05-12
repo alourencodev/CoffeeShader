@@ -10,9 +10,11 @@
 namespace coffee::fileWatcher
 {
 
+using onModifiedEvent = std::function<void(const std::string &)>;
+
 DEFINE_HANDLE(WatchHandle);
 
-WatchHandle watch(const std::string &dir, std::function<void()> event);
+WatchHandle watch(const std::string &dir, onModifiedEvent event);
 void unwatch(WatchHandle handle);
 void poll();
 

@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <utility>
 
 #include "Camera.hpp"
 #include "FileWatcher.hpp"
@@ -11,6 +12,8 @@
 
 namespace coffee
 {
+
+enum class ShaderStage : uint8_t;
 
 struct Canvas
 {
@@ -23,7 +26,7 @@ struct CanvasDescriptor
 {
     struct ShaderFile
     {
-        std::string dir = "";
+        std::string source = "";
         fileWatcher::WatchHandle watchHandle;
     };
 
@@ -34,11 +37,12 @@ struct CanvasDescriptor
 namespace canvas
 {
 
-Canvas create(const glm::ivec2 &windowSize);
+// TODO: Get a better return for this
+std::pair<Canvas, CanvasDescriptor> create(const glm::ivec2 &windowSize);
 void draw(const Canvas &canvas);
 void terminate(const Canvas &canvas);
 
-void setShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir);
+void loadShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &dir, ShaderStage stage);
 
 }
 

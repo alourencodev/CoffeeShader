@@ -11,7 +11,7 @@
 namespace coffee::canvas
 {
 
-Canvas create(const glm::ivec2 &windowSize)
+std::pair<Canvas, CanvasDescriptor> create(const glm::ivec2 &windowSize)
 {
     const auto clearColor = constants::k_clearColor;
     glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
@@ -20,7 +20,16 @@ Canvas create(const glm::ivec2 &windowSize)
     canvas.camera = camera::create(windowSize);
     canvas.mesh = mesh::create(constants::shapes::k_cube);
 
-    return canvas;
+    CanvasDescriptor descriptor = {};
+
+    // TODO: Have the source on the code side
+    descriptor.vertexFile.source = file::load(constants::k_defaultVertexShaderDir);
+    descriptor.fragmentFile.source = file::load(constants::k_defaultFragmentShaderDir);
+
+    canvas.shader = shader::create(descriptor.vertexFile.source, descriptor.fragmentFile.source);
+    shader::use(canvas.shader);
+
+    return {canvas, descriptor};
 }
 
 void draw(const Canvas &canvas)
@@ -40,33 +49,27 @@ void terminate(const Canvas &canvas)
     mesh::clean(canvas.mesh);
 }
 
-inline void loadShader(Canvas *canvas, const std::string &vertexDir, const std::string &fragmentDir)
+void loadShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &dir, ShaderStage stage)
 {
-    Shader tempShader = canvas->shader;
-    auto vertSource = file::load(vertexDir);
-    auto fragSource = file::load(fragmentDir);
-    canvas->shader = shader::create(vertSource, fragSource);
-    shader::use(canvas->shader);
-    shader::terminate(tempShader);
-}
-
-void setShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &vertexDir, const std::string &fragmentDir)
-{
-    std::function<void()> reloadShader = [canvas, descriptor]() -> void
+    fileWatcher::onModifiedEvent reloadShader = [canvas, descriptor, stage](const std::string &dir) -> void
     {
-        loadShader(canvas, descriptor->vertexFile.dir, descriptor->fragmentFile.dir);
+        loadShader(canvas, descriptor, dir, stage);
     };
 
-    loadShader(canvas, vertexDir, fragmentDir);
+    auto &shaderFile = stage == ShaderStage::eVertex ? descriptor->vertexFile : descriptor->fragmentFile;
+    shaderFile.source = file::load(dir);
 
-    descriptor->vertexFile.dir = vertexDir;
-    descriptor->fragmentFile.dir = fragmentDir;
+    {   // SetShader
+        Shader tempShader = canvas->shader;
+        canvas->shader = shader::create(descriptor->vertexFile.source, descriptor->fragmentFile.source);
+        shader::use(canvas->shader);
+        shader::terminate(tempShader);
+    }
 
-    fileWatcher::unwatch(descriptor->vertexFile.watchHandle);
-    fileWatcher::unwatch(descriptor->fragmentFile.watchHandle);
-
-    descriptor->vertexFile.watchHandle = fileWatcher::watch(vertexDir, reloadShader);
-    descriptor->fragmentFile.watchHandle = fileWatcher::watch(fragmentDir, reloadShader);
+    {   // WatchFile
+        fileWatcher::unwatch(shaderFile.watchHandle);
+        shaderFile.watchHandle = fileWatcher::watch(dir, reloadShader);
+    }
 }
 
 }

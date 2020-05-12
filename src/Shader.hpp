@@ -7,6 +7,12 @@
 namespace coffee
 {
 
+enum class ShaderStage : uint8_t
+{
+    eVertex,
+    eFragment
+};
+
 struct Uniform
 {
     void *valuePtr;
