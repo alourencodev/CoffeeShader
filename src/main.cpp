@@ -16,8 +16,7 @@ using namespace std::chrono;
 constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
 
 static GLFWwindow *s_window;
-static Canvas s_canvas = {}; 
-static CanvasDescriptor s_canvasDescriptor = {};
+static Canvas s_canvas = {};
 
 static void init()
 {
@@ -26,22 +25,18 @@ static void init()
     windowInfo.size = constants::window::k_size;
     windowInfo.isResizable = true;
     s_window = window::create(windowInfo);
-
-    // TODO: Have a better structure for this
-    auto pair = canvas::create(windowInfo.size);
-    s_canvas = pair.first;
-    s_canvasDescriptor = pair.second;
+    s_canvas = canvas::create(windowInfo.size);
 
     input::init(s_window);
-    trackball::init(s_canvas.camera);           // After input init
-    gui::init(s_window, &s_canvas, &s_canvasDescriptor);
+    trackball::init(s_canvas.renderables.camera);           // After input init
+    gui::init(s_window, &s_canvas);
 }
 
 static void update()
 {
     glfwPollEvents();
  
-    canvas::draw(s_canvas);
+    canvas::draw(s_canvas.renderables);
     gui::draw();
 
     if (gui::usedInput()) {

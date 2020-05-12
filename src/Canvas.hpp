@@ -17,32 +17,37 @@ enum class ShaderStage : uint8_t;
 
 struct Canvas
 {
-    Camera camera;
-    Mesh mesh;
-    Shader shader;
-};
-
-struct CanvasDescriptor
-{
-    struct ShaderFile
+    struct Renderables
     {
-        std::string source = "";
-        fileWatcher::WatchHandle watchHandle;
+        Camera camera;
+        Mesh mesh;
+        Shader shader;
     };
 
-    ShaderFile vertexFile;
-    ShaderFile fragmentFile;
+    struct Descriptor
+    {
+        struct ShaderFile
+        {
+            std::string source = "";
+            fileWatcher::WatchHandle watchHandle;
+        };
+
+        ShaderFile vertexFile;
+        ShaderFile fragmentFile;
+    };
+
+    Renderables renderables;
+    Descriptor descriptor;
 };
 
 namespace canvas
 {
 
-// TODO: Get a better return for this
-std::pair<Canvas, CanvasDescriptor> create(const glm::ivec2 &windowSize);
-void draw(const Canvas &canvas);
+Canvas create(const glm::ivec2 &windowSize);
+void draw(const Canvas::Renderables &renderables);
 void terminate(const Canvas &canvas);
 
-void loadShader(Canvas *canvas, CanvasDescriptor *descriptor, const std::string &dir, ShaderStage stage);
+void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage);
 
 }
 

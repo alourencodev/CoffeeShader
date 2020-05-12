@@ -21,7 +21,6 @@ constexpr float k_valueEditorDragSpeed = 0.1f;
 
 static std::vector<std::function<void()>> s_activeGUIShowFunctions;
 static Canvas *s_canvas = nullptr;
-static CanvasDescriptor *s_canvasDescriptor = nullptr;
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
@@ -50,12 +49,12 @@ static void showToolbar()
         if (ImGui::BeginMenu("Open Shader")) {
             if (ImGui::MenuItem("Vertex")) {
                 std::string dir = file::openDialog();
-                canvas::loadShader(s_canvas, s_canvasDescriptor, dir, ShaderStage::eVertex);
+                canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
             }
 
             if (ImGui::MenuItem("Fragment")) {
                 std::string dir = file::openDialog();
-                canvas::loadShader(s_canvas, s_canvasDescriptor, dir, ShaderStage::eFragment);
+                canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
             }
 
             ImGui::EndMenu();
@@ -78,8 +77,8 @@ static void showUniformInspector()
 {
     ImGui::Begin("Uniform Editor");
 
-    const auto &uniforms = s_canvas->shader.uniforms;
-    const auto &uniformNames = s_canvas->shader.uniformNames;
+    const auto &uniforms = s_canvas->renderables.shader.uniforms;
+    const auto &uniformNames = s_canvas->renderables.shader.uniformNames;
     for (int i = 0; i < uniforms.size(); i++) { 
         if (s_typeEditorMap.find(uniforms[i].type) != s_typeEditorMap.end()) {
             s_typeEditorMap[uniforms[i].type](uniformNames[i].c_str(), uniforms[i].valuePtr);
@@ -89,7 +88,7 @@ static void showUniformInspector()
     ImGui::End();
 }
 
-void init(GLFWwindow *window, Canvas *canvas, CanvasDescriptor *descriptor)
+void init(GLFWwindow *window, Canvas *canvas)
 {   
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
@@ -97,7 +96,6 @@ void init(GLFWwindow *window, Canvas *canvas, CanvasDescriptor *descriptor)
         ImGui_ImplOpenGL3_Init(k_glslVersion);
 
         s_canvas = canvas;
-        s_canvasDescriptor = descriptor;
         s_activeGUIShowFunctions.reserve(4);
         s_activeGUIShowFunctions.emplace_back(showUniformInspector);
         s_activeGUIShowFunctions.emplace_back(showToolbar);
