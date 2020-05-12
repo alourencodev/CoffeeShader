@@ -11,6 +11,17 @@ namespace coffee::window
 
 constexpr char k_logTag[] = "Window";
 
+static void glErrorLog(const char *name, void *funcPtr, int rgsLength, ...)
+{
+    GLenum error_code;
+    error_code = glad_glGetError();
+
+    if (error_code != GL_NO_ERROR) {
+        // TODO: Have error namings
+        logFatal("GL", "Error %d in %s.", error_code, name);
+    }
+}
+
 GLFWwindow *create(const Info &info)
 {
     if (!glfwInit()) {
@@ -36,6 +47,7 @@ GLFWwindow *create(const Info &info)
         logFatal(k_logTag, "Unable to initialize GL Context.");
     }
 
+    glad_set_post_callback(glErrorLog);
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
     return window;
