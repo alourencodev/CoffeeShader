@@ -5,9 +5,9 @@
 #include <glad/glad.h>
 
 #include "Constants.hpp"
+#include "Core/GL.hpp"
+#include "Core/Log.hpp"
 #include "Gui.hpp"
-#include "Utils/GL.hpp"
-#include "Utils/Log.hpp"
 
 namespace coffee::shader
 {

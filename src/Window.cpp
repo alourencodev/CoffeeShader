@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Utils/Log.hpp"
+#include "Core/Log.hpp"
 
 namespace coffee::window
 {

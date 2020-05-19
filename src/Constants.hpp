@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-#include "Utils/Math.hpp"
+#include "Core/Math.hpp"
 
 namespace coffee::constants
 {
@@ -19,7 +19,7 @@ static const glm::ivec2 k_size = {1920, 1080};
 namespace camera
 {
 static const glm::vec3 k_startPosition = {0.0f, 0.0f, 6.0f};
-constexpr float k_fieldOfView = utils::math::degreeToRadian(45.0f);
+constexpr float k_fieldOfView = utils::degreeToRadian(45.0f);
 constexpr float k_near = 0.1f;
 constexpr float k_far = 100.0f;
 }

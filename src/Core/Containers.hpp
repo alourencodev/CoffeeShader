@@ -1,7 +1,7 @@
-#ifndef COFFEE_MATRIX_HPP
-#define COFFEE_MATRIX_HPP
+#ifndef COFFEE_UTILS_CONTAINERS_HPP 
+#define COFFEE_UTILS_CONTAINERS_HPP 
 
-#include <array>
+#include <vector>
 
 namespace coffee
 {
@@ -17,6 +17,18 @@ public:
 private:
     std::array<std::array<T, columns>, rows> _data;
 };
+
+namespace utils
+{
+
+template<typename T>
+void unorderedRemove(std::vector<T> &v, const typename std::vector<T>::iterator &it)
+{
+    *it = std::move(v.back());
+    v.pop_back();
+}
+
+}
 
 }
 

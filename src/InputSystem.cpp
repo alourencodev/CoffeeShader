@@ -7,9 +7,8 @@
 #include <vector>
 
 #include "Canvas.hpp"
-#include "Utils/Containers.hpp"
-#include "Utils/Log.hpp"
-#include "Utils/Matrix.hpp"
+#include "Core/Containers.hpp"
+#include "Core/Log.hpp"
 
 namespace coffee::input
 {

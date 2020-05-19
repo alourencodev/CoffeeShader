@@ -12,9 +12,9 @@
 
 #include "Canvas.hpp"
 #include "Constants.hpp"
+#include "Core/Log.hpp"
+#include "Core/File.hpp"
 #include "Shader.hpp"
-#include "Utils/Log.hpp"
-#include "Utils/File.hpp"
 
 namespace coffee::gui
 {

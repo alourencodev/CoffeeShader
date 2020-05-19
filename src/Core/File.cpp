@@ -4,7 +4,7 @@
 #include <osdialog/osdialog.h>
 #include <sstream>
 
-#include "Utils/Log.hpp"
+#include "Core/Log.hpp"
 
 namespace coffee::file
 {
