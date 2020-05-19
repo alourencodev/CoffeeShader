@@ -26,20 +26,18 @@ std::string load(const std::string &dir)
     return buffer.str();  
 }
 
-std::string openDialog()
+bool openDialog(std::string *outFileName)
 {
     char *filename = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, nullptr);
 
     if (filename == nullptr) {
-        // TODO: Handle this in another way
-        logError(k_logTag, "Unable to open file through dialog.");
-        return "";
+        return false;
     }
 
-    auto result = std::string(filename);
-    free(filename); // TODO: Get a better way to manage this
+    *outFileName = std::string(filename);
+    free(filename);
 
-    return result;
+    return true;
 }
 
 }

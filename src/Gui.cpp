@@ -47,20 +47,27 @@ static TypeEditorFunctionMap s_typeEditorMap =
 
 static void showToolbar()
 {
+    auto showOpenShader = []() -> void
+    {
+        if (ImGui::MenuItem("Vertex")) {
+            std::string dir; 
+            if (file::openDialog(&dir)) {
+                canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
+            }
+        }
+        if (ImGui::MenuItem("Fragment")) {
+            std::string dir; 
+            if (file::openDialog(&dir)) {
+                canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
+            }
+        }
+        ImGui::EndMenu();
+    };
+
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("File")) {
         if (ImGui::BeginMenu("Open Shader")) {
-            if (ImGui::MenuItem("Vertex")) {
-                std::string dir = file::openDialog();
-                canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
-            }
-
-            if (ImGui::MenuItem("Fragment")) {
-                std::string dir = file::openDialog();
-                canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
-            }
-
-            ImGui::EndMenu();
+            showOpenShader();
         }
 
         ImGui::EndMenu();
