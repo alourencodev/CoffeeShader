@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include <osdialog/osdialog.h>
 #include <vector>
+#include <unordered_map>
 
 #include "Canvas.hpp"
 #include "Shader.hpp"
@@ -45,7 +46,6 @@ static void showToolbar()
 {
     ImGui::BeginMainMenuBar();
     if (ImGui::BeginMenu("File")) {
-
         if (ImGui::BeginMenu("Open Shader")) {
             if (ImGui::MenuItem("Vertex")) {
                 std::string dir = file::openDialog();

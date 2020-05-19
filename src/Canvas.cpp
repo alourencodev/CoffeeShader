@@ -63,6 +63,7 @@ void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage)
     {   // SetShader
         auto &renderables = canvas->renderables;
         Shader tempShader = renderables.shader;
+        // TODO: Abort if fails compilation
         renderables.shader = shader::create(descriptor.vertexFile.source, descriptor.fragmentFile.source);
         shader::use(renderables.shader);
         shader::terminate(tempShader);
