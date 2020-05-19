@@ -100,7 +100,6 @@ static void showUniformInspector()
 
 static void showLogger()
 {
-    ImGui::SetNextWindowSize(ImVec2(600, 400));
     ImGui::Begin("Log");
 
     if (ImGui::Button("Clear")) {
