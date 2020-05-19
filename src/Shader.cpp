@@ -70,7 +70,7 @@ static GLuint compileShader(GLenum shaderType, const std::string &source)
     glCompileShader(shaderId);
 
     GLint success = 0;
-    char error[128] = "";
+    char error[constants::k_maxLogSize] = "";
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
     if (success == GL_FALSE)
     {
@@ -90,7 +90,7 @@ static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
     glLinkProgram(programID);
 
     GLint success = 0;
-    char error[128] = "";
+    char error[constants::k_maxLogSize] = "";
     glGetProgramiv(programID, GL_LINK_STATUS, &success);
     if (success == GL_FALSE)
     {

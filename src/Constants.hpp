@@ -48,6 +48,7 @@ static const std::vector<float> k_cube = {-1.0f,-1.0f,-1.0f,    -1.0f,-1.0f, 1.0
 
 static const glm::vec3 k_clearColor = {0.2f, 0.2f, 0.2f};
 constexpr float k_framesPerSecond = 60;
+constexpr uint8_t k_maxLogSize = 128;
 constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
 constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
 
