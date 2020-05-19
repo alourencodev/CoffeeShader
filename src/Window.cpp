@@ -18,7 +18,7 @@ static void glErrorLog(const char *name, void *funcPtr, int rgsLength, ...)
 
     if (error_code != GL_NO_ERROR) {
         // TODO: Have error namings
-        logFatal("GL", "Error %d in %s.", error_code, name);
+        logError("GL", "Error %d in %s.", error_code, name);
     }
 }
 

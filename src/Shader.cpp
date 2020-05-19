@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 
 #include "Constants.hpp"
+#include "Gui.hpp"
 #include "Utils/GL.hpp"
 #include "Utils/Log.hpp"
 
@@ -75,7 +76,7 @@ static GLuint compileShader(GLenum shaderType, const std::string &source)
     if (success == GL_FALSE)
     {
     	glGetShaderInfoLog(shaderId, sizeof(error), NULL, error);
-        logError(k_logTag, "Shader compilation error:\n%s", error);
+        gui::log("[Error] Shader compilation error:\n%s", error);
     }
 
     return shaderId;
@@ -95,7 +96,7 @@ static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
     if (success == GL_FALSE)
     {
     	glGetProgramInfoLog(programID, sizeof(error), NULL, error);
-        logError(k_logTag, "Shader program linking error:\n%s", error);
+        gui::log("[Error] Shader program linking error:\n%s", error);
     }
 
     return programID;

@@ -6,10 +6,12 @@
 #include <functional>
 #include <glad/glad.h>
 #include <osdialog/osdialog.h>
+#include <string>
 #include <vector>
 #include <unordered_map>
 
 #include "Canvas.hpp"
+#include "Constants.hpp"
 #include "Shader.hpp"
 #include "Utils/Log.hpp"
 #include "Utils/File.hpp"
@@ -20,14 +22,15 @@ namespace coffee::gui
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
 
-static std::vector<std::function<void()>> s_activeGUIShowFunctions;
-static Canvas *s_canvas = nullptr;
-
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
 { \
     ImGui::imgui_call(label, reinterpret_cast<cast_type *>(value), k_valueEditorDragSpeed); \
 }
+
+static std::vector<std::function<void()>> s_activeGUIShowFunctions;
+static std::vector<std::string> s_guiLogs;
+static Canvas *s_canvas = nullptr;
 
 using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
 static TypeEditorFunctionMap s_typeEditorMap = 
@@ -88,6 +91,29 @@ static void showUniformInspector()
     ImGui::End();
 }
 
+static void showLogger()
+{
+    ImGui::SetNextWindowSize(ImVec2(600, 400));
+    ImGui::Begin("Log");
+
+    if (ImGui::Button("Clear")) {
+        s_guiLogs.clear();
+    }
+
+    ImGui::Separator();
+    ImGui::BeginChild("logScrollView");
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
+
+    for (const auto &log : s_guiLogs) {
+        ImGui::TextUnformatted(log.c_str());
+    }
+
+    ImGui::SetScrollHere(1.0f);
+    ImGui::PopStyleVar();
+    ImGui::EndChild();
+    ImGui::End();
+}
+
 void init(GLFWwindow *window, Canvas *canvas)
 {   
         ImGui::CreateContext();
@@ -99,6 +125,9 @@ void init(GLFWwindow *window, Canvas *canvas)
         s_activeGUIShowFunctions.reserve(4);
         s_activeGUIShowFunctions.emplace_back(showUniformInspector);
         s_activeGUIShowFunctions.emplace_back(showToolbar);
+        s_activeGUIShowFunctions.emplace_back(showLogger);
+        
+        s_guiLogs.reserve(10);
 }
 
 void draw()
@@ -126,6 +155,17 @@ void terminate()
 bool usedInput()
 {
     return ImGui::GetIO().WantCaptureMouse;
+}
+
+void log(const char *format, ...)
+{
+    char buffer[constants::k_maxLogSize];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
+    s_guiLogs.emplace_back(std::string(buffer));
 }
 
 }
