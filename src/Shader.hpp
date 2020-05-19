@@ -31,7 +31,7 @@ struct Shader
 namespace shader
 {
 
-Shader create(const std::string &vertexDir, const std::string &fragmentDir);
+bool create(Shader *outShader, const std::string &vertSource, const std::string &fragSource);
 void use(const Shader &shader);
 void updateUniforms(const Shader &shader);
 void terminate(const Shader &shader);

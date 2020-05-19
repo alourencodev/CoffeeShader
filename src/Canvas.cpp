@@ -7,9 +7,12 @@
 
 #include "Constants.hpp"
 #include "Core/File.hpp"
+#include "Gui.hpp"
 
 namespace coffee::canvas
 {
+
+constexpr char k_logTag[] = "Canvas";
 
 Canvas create(const glm::ivec2 &windowSize)
 {
@@ -26,8 +29,11 @@ Canvas create(const glm::ivec2 &windowSize)
     descriptor.vertexFile.source = file::load(constants::k_defaultVertexShaderDir);
     descriptor.fragmentFile.source = file::load(constants::k_defaultFragmentShaderDir);
 
-    renderables.shader = shader::create(descriptor.vertexFile.source, descriptor.fragmentFile.source);
-    shader::use(renderables.shader);
+    if (shader::create(&renderables.shader, descriptor.vertexFile.source, descriptor.fragmentFile.source)) {
+        shader::use(renderables.shader);
+    } else {
+        gui::log(k_logTag, "Unable to compile startup shader");
+    }
 
     return {renderables, descriptor};
 }
@@ -63,9 +69,14 @@ void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage)
     {   // SetShader
         auto &renderables = canvas->renderables;
         Shader tempShader = renderables.shader;
-        // TODO: Abort if fails compilation
-        renderables.shader = shader::create(descriptor.vertexFile.source, descriptor.fragmentFile.source);
-        shader::use(renderables.shader);
+
+        if (shader::create(&renderables.shader, descriptor.vertexFile.source, descriptor.fragmentFile.source)) {
+            shader::use(renderables.shader);
+        } else {
+            logError("Unable to load %s", dir.c_str());
+            return;
+        }
+
         shader::terminate(tempShader);
     }
 
