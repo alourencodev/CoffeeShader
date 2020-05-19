@@ -5,8 +5,8 @@
 #include <filesystem>
 #include <vector>
 
-#include "Utils/Assert.hpp"
-#include "Utils/Containers.hpp"
+#include "Core/Assert.hpp"
+#include "Core/Containers.hpp"
 
 namespace coffee::fileWatcher
 {

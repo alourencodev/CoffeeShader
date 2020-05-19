@@ -6,27 +6,33 @@
 #include <functional>
 #include <glad/glad.h>
 #include <osdialog/osdialog.h>
+#include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "Canvas.hpp"
+#include "Constants.hpp"
+#include "Core/Log.hpp"
+#include "Core/File.hpp"
 #include "Shader.hpp"
-#include "Utils/Log.hpp"
-#include "Utils/File.hpp"
 
 namespace coffee::gui
 {
 
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
-
-static std::vector<std::function<void()>> s_activeGUIShowFunctions;
-static Canvas *s_canvas = nullptr;
+constexpr char k_fragmentFilters[] = "Fragment:frag,glsl";
+constexpr char k_vertexFilters[] = "Vertex:frag,glsl";
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
 { \
     ImGui::imgui_call(label, reinterpret_cast<cast_type *>(value), k_valueEditorDragSpeed); \
 }
+
+static std::vector<std::function<void()>> s_activeGUIShowFunctions;
+static std::vector<std::string> s_guiLogs;
+static Canvas *s_canvas = nullptr;
 
 using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
 static TypeEditorFunctionMap s_typeEditorMap = 
@@ -43,21 +49,32 @@ static TypeEditorFunctionMap s_typeEditorMap =
 
 static void showToolbar()
 {
-    ImGui::BeginMainMenuBar();
-    if (ImGui::BeginMenu("File")) {
-
-        if (ImGui::BeginMenu("Open Shader")) {
-            if (ImGui::MenuItem("Vertex")) {
-                std::string dir = file::openDialog();
+    auto showOpenShader = []() -> void
+    {
+        // TODO: Get better way to manage filters memory. Probably will need to hack submodule
+        if (ImGui::MenuItem("Vertex")) {
+            osdialog_filters *filters = osdialog_filters_parse(k_vertexFilters);
+            std::string dir;
+            if (file::openDialog(&dir, filters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
             }
-
-            if (ImGui::MenuItem("Fragment")) {
-                std::string dir = file::openDialog();
+            osdialog_filters_free(filters);
+        }
+        if (ImGui::MenuItem("Fragment")) {
+            osdialog_filters *filters = osdialog_filters_parse(k_fragmentFilters);
+            std::string dir; 
+            if (file::openDialog(&dir, filters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
             }
+            osdialog_filters_free(filters);
+        }
+        ImGui::EndMenu();
+    };
 
-            ImGui::EndMenu();
+    ImGui::BeginMainMenuBar();
+    if (ImGui::BeginMenu("File")) {
+        if (ImGui::BeginMenu("Open Shader")) {
+            showOpenShader();
         }
 
         ImGui::EndMenu();
@@ -88,6 +105,28 @@ static void showUniformInspector()
     ImGui::End();
 }
 
+static void showLogger()
+{
+    ImGui::Begin("Log");
+
+    if (ImGui::Button("Clear")) {
+        s_guiLogs.clear();
+    }
+
+    ImGui::Separator();
+    ImGui::BeginChild("logScrollView");
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
+
+    for (const auto &log : s_guiLogs) {
+        ImGui::TextUnformatted(log.c_str());
+    }
+
+    ImGui::SetScrollHere(1.0f);
+    ImGui::PopStyleVar();
+    ImGui::EndChild();
+    ImGui::End();
+}
+
 void init(GLFWwindow *window, Canvas *canvas)
 {   
         ImGui::CreateContext();
@@ -99,6 +138,9 @@ void init(GLFWwindow *window, Canvas *canvas)
         s_activeGUIShowFunctions.reserve(4);
         s_activeGUIShowFunctions.emplace_back(showUniformInspector);
         s_activeGUIShowFunctions.emplace_back(showToolbar);
+        s_activeGUIShowFunctions.emplace_back(showLogger);
+        
+        s_guiLogs.reserve(10);
 }
 
 void draw()
@@ -126,6 +168,17 @@ void terminate()
 bool usedInput()
 {
     return ImGui::GetIO().WantCaptureMouse;
+}
+
+void log(const char *format, ...)
+{
+    char buffer[constants::k_maxLogSize];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+
+    s_guiLogs.emplace_back(std::string(buffer));
 }
 
 }

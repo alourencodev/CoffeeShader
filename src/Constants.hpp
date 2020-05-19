@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-#include "Utils/Math.hpp"
+#include "Core/Math.hpp"
 
 namespace coffee::constants
 {
@@ -13,13 +13,13 @@ namespace coffee::constants
 namespace window
 {
 constexpr char k_title[] = "Coffee Shader";
-static const glm::ivec2 k_size = {1920, 1080};
+static const glm::ivec2 k_size = {1280, 720};
 }
 
 namespace camera
 {
 static const glm::vec3 k_startPosition = {0.0f, 0.0f, 6.0f};
-constexpr float k_fieldOfView = utils::math::degreeToRadian(45.0f);
+constexpr float k_fieldOfView = utils::degreeToRadian(45.0f);
 constexpr float k_near = 0.1f;
 constexpr float k_far = 100.0f;
 }
@@ -48,6 +48,7 @@ static const std::vector<float> k_cube = {-1.0f,-1.0f,-1.0f,    -1.0f,-1.0f, 1.0
 
 static const glm::vec3 k_clearColor = {0.2f, 0.2f, 0.2f};
 constexpr float k_framesPerSecond = 60;
+constexpr uint16_t k_maxLogSize = 256;
 constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
 constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
 

@@ -5,8 +5,9 @@
 #include <glad/glad.h>
 
 #include "Constants.hpp"
-#include "Utils/GL.hpp"
-#include "Utils/Log.hpp"
+#include "Core/GL.hpp"
+#include "Core/Log.hpp"
+#include "Gui.hpp"
 
 namespace coffee::shader
 {
@@ -60,7 +61,7 @@ static TypeUniformFunctionMap s_uniformFunctionMap =
     {GL_FLOAT_VEC4,         TYPE_UNIFORM_4(f, float)},
 };
 
-static GLuint compileShader(GLenum shaderType, const std::string &source)
+static bool compileShader(GLuint *outShaderId, GLenum shaderType, const std::string &source)
 {
     GLuint shaderId = glCreateShader(shaderType);
     const char *shaderSource = source.c_str();
@@ -70,64 +71,70 @@ static GLuint compileShader(GLenum shaderType, const std::string &source)
     glCompileShader(shaderId);
 
     GLint success = 0;
-    char error[128] = "";
+    char error[constants::k_maxLogSize] = "";
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
     if (success == GL_FALSE)
     {
     	glGetShaderInfoLog(shaderId, sizeof(error), NULL, error);
-        logError(k_logTag, "Shader compilation error:\n%s", error);
+        gui::log("[Error] Shader compilation error:\n%s", error);
+        glDeleteShader(shaderId);
+        return false;
     }
 
-    return shaderId;
+    *outShaderId = shaderId;
+    return true;
 }
 
-static GLuint linkProgram(GLuint vertShaderId, GLuint fragShaderId)
+static bool linkProgram(GLuint *outProgramId, GLuint vertShaderId, GLuint fragShaderId)
 {
-    GLuint programID = glCreateProgram();
+    GLuint programId = glCreateProgram();
 
-    glAttachShader(programID, vertShaderId);
-    glAttachShader(programID, fragShaderId);
-    glLinkProgram(programID);
+    glAttachShader(programId, vertShaderId);
+    glAttachShader(programId, fragShaderId);
+    glLinkProgram(programId);
 
     GLint success = 0;
-    char error[128] = "";
-    glGetProgramiv(programID, GL_LINK_STATUS, &success);
+    char error[constants::k_maxLogSize] = "";
+    glGetProgramiv(programId, GL_LINK_STATUS, &success);
     if (success == GL_FALSE)
     {
-    	glGetProgramInfoLog(programID, sizeof(error), NULL, error);
-        logError(k_logTag, "Shader program linking error:\n%s", error);
+    	glGetProgramInfoLog(programId, sizeof(error), NULL, error);
+        gui::log("[Error] Shader program linking error:\n%s", error);
+        glDeleteProgram(programId);
+        return false;
     }
 
-    return programID;
+    *outProgramId = programId;
+    return true;
 }
 
-void setupUniforms(Shader &shader)
+void setupUniforms(Shader *shader)
 {
     static std::array<char, k_maxUniformBytes> s_uniformValuesStack = {};
     unsigned s_uniformStackPointer = 0;
 
     s_uniformStackPointer = 0;
     GLint count;
-    glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORMS, &count);
+    glGetProgramiv(shader->programId, GL_ACTIVE_UNIFORMS, &count);
 
-    shader.uniforms.reserve(count);
-    shader.uniformNames.reserve(count);
+    shader->uniforms.reserve(count);
+    shader->uniformNames.reserve(count);
 
     for (GLuint i = 0; i < count; i++) {
         GLchar buffer[k_maxUniformNameLength];
         GLenum type;
 
         GLsizei length, size; // Dummies
-        glGetActiveUniform(shader.programId, i, k_maxUniformNameLength, &length, &size, &type, buffer);
+        glGetActiveUniform(shader->programId, i, k_maxUniformNameLength, &length, &size, &type, buffer);
 
         int32_t uniformBytes = utils::sizeofGLType(type);
         if (uniformBytes > 0) {
             std::string name = std::string(buffer);
-            GLuint location = glGetUniformLocation(shader.programId, buffer);
+            GLuint location = glGetUniformLocation(shader->programId, buffer);
 
             Uniform uniform = {&s_uniformValuesStack[s_uniformStackPointer], type, location};
-            shader.uniforms.emplace_back(uniform);
-            shader.uniformNames.emplace_back(name);
+            shader->uniforms.emplace_back(uniform);
+            shader->uniformNames.emplace_back(name);
             s_uniformStackPointer += uniformBytes;
 
             if (s_uniformStackPointer >= k_maxUniformBytes) {
@@ -139,20 +146,27 @@ void setupUniforms(Shader &shader)
     }
 }
 
-Shader create(const std::string &vertSource, const std::string &fragSource)
+bool create(Shader *outShader, const std::string &vertSource, const std::string &fragSource)
 {
-    GLuint vertShaderId = compileShader(GL_VERTEX_SHADER, vertSource);
-    GLuint fragShaderId = compileShader(GL_FRAGMENT_SHADER, fragSource);
-
+    GLuint vertShaderId, fragShaderId;
     Shader shader = {};
-    shader.programId = linkProgram(vertShaderId, fragShaderId);
+    if (!compileShader(&vertShaderId, GL_VERTEX_SHADER, vertSource) ||
+        !compileShader(&fragShaderId, GL_FRAGMENT_SHADER, fragSource)) {
+            return false;
+        }
+
+    if (!linkProgram(&shader.programId, vertShaderId, fragShaderId)) {
+        return false;
+    }
+
     shader.mvpIndex = glGetUniformLocation(shader.programId, k_mvpUniform);
-    setupUniforms(shader);
+    setupUniforms(&shader);
 
     glDeleteShader(vertShaderId);
     glDeleteShader(fragShaderId);
 
-    return shader;
+    *outShader = std::move(shader);
+    return true;
 }
     
 void use(const Shader &shader)

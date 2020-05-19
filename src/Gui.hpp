@@ -15,6 +15,7 @@ void init(GLFWwindow *window, Canvas *canvas);
 void draw();
 void terminate();
 bool usedInput();
+void log(const char *format, ...);
 
 }
 

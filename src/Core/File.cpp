@@ -4,7 +4,7 @@
 #include <osdialog/osdialog.h>
 #include <sstream>
 
-#include "Utils/Log.hpp"
+#include "Core/Log.hpp"
 
 namespace coffee::file
 {
@@ -26,20 +26,19 @@ std::string load(const std::string &dir)
     return buffer.str();  
 }
 
-std::string openDialog()
+bool openDialog(std::string *outFileName, osdialog_filters *filters)
 {
-    char *filename = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, nullptr);
+    char *filename = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, filters);
 
     if (filename == nullptr) {
-        // TODO: Handle this in another way
-        logError(k_logTag, "Unable to open file through dialog.");
-        return "";
+        return false;
     }
 
-    auto result = std::string(filename);
-    free(filename); // TODO: Get a better way to manage this
+    *outFileName = std::string(filename);
+    // TODO: Handle memory in a better way. Probably will need to hack submodule
+    free(filename);
 
-    return result;
+    return true;
 }
 
 }
