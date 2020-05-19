@@ -21,6 +21,8 @@ namespace coffee::gui
 
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
+constexpr char k_fragmentFilters[] = "Fragment:frag,glsl";
+constexpr char k_vertexFilters[] = "Vertex:frag,glsl";
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
@@ -49,17 +51,22 @@ static void showToolbar()
 {
     auto showOpenShader = []() -> void
     {
+        // TODO: Get better way to manage filters memory. Probably will need to hack submodule
         if (ImGui::MenuItem("Vertex")) {
-            std::string dir; 
-            if (file::openDialog(&dir)) {
+            osdialog_filters *filters = osdialog_filters_parse(k_vertexFilters);
+            std::string dir;
+            if (file::openDialog(&dir, filters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
             }
+            osdialog_filters_free(filters);
         }
         if (ImGui::MenuItem("Fragment")) {
+            osdialog_filters *filters = osdialog_filters_parse(k_fragmentFilters);
             std::string dir; 
-            if (file::openDialog(&dir)) {
+            if (file::openDialog(&dir, filters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
             }
+            osdialog_filters_free(filters);
         }
         ImGui::EndMenu();
     };

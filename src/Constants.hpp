@@ -13,7 +13,7 @@ namespace coffee::constants
 namespace window
 {
 constexpr char k_title[] = "Coffee Shader";
-static const glm::ivec2 k_size = {1920, 1080};
+static const glm::ivec2 k_size = {1280, 720};
 }
 
 namespace camera

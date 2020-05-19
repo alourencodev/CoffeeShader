@@ -26,15 +26,16 @@ std::string load(const std::string &dir)
     return buffer.str();  
 }
 
-bool openDialog(std::string *outFileName)
+bool openDialog(std::string *outFileName, osdialog_filters *filters)
 {
-    char *filename = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, nullptr);
+    char *filename = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, filters);
 
     if (filename == nullptr) {
         return false;
     }
 
     *outFileName = std::string(filename);
+    // TODO: Handle memory in a better way. Probably will need to hack submodule
     free(filename);
 
     return true;
