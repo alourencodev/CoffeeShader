@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "Camera.hpp"
-#include "Constants.hpp"
+#include "Core/Math.hpp"
 #include "InputSystem.hpp"
 
 namespace coffee::trackball
@@ -26,7 +26,7 @@ void init(Camera &camera)
         float yaw = -deltaPosition.x * k_rotationSpeed;
         float pitch = -deltaPosition.y * k_rotationSpeed;
 
-        auto rotationQuat = glm::angleAxis(pitch, constants::axis::k_right) * glm::angleAxis(yaw, constants::axis::k_up);
+        auto rotationQuat = glm::angleAxis(pitch, math::axis::k_right) * glm::angleAxis(yaw, math::axis::k_up);
         camera.rotation = camera.rotation * rotationQuat;
     };
 

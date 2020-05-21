@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
-#include "Constants.hpp"
 #include "Core/File.hpp"
 #include "Gui.hpp"
 
@@ -14,20 +13,38 @@ namespace coffee::canvas
 
 constexpr char k_logTag[] = "Canvas";
 
+static const glm::vec3 k_clearColor = {0.2f, 0.2f, 0.2f};
+constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
+constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
+
+// TODO: Move this elsewhere when adding more default shapes
+static const std::vector<float> k_cube = {-1.0f,-1.0f,-1.0f,    -1.0f,-1.0f, 1.0f,  -1.0f, 1.0f, 1.0f,
+                                          1.0f, 1.0f,-1.0f,     -1.0f,-1.0f,-1.0f,  -1.0f, 1.0f,-1.0f,
+                                          1.0f,-1.0f, 1.0f,     -1.0f,-1.0f,-1.0f,  1.0f,-1.0f,-1.0f,
+                                          1.0f, 1.0f,-1.0f,     1.0f,-1.0f,-1.0f,   -1.0f,-1.0f,-1.0f,
+                                          -1.0f,-1.0f,-1.0f,    -1.0f, 1.0f, 1.0f,  -1.0f, 1.0f,-1.0f,
+                                          1.0f,-1.0f, 1.0f,     -1.0f,-1.0f, 1.0f,  -1.0f,-1.0f,-1.0f,
+                                          -1.0f, 1.0f, 1.0f,    -1.0f,-1.0f, 1.0f,  1.0f,-1.0f, 1.0f,
+                                          1.0f, 1.0f, 1.0f,     1.0f,-1.0f,-1.0f,   1.0f, 1.0f,-1.0f,
+                                          1.0f,-1.0f,-1.0f,     1.0f, 1.0f, 1.0f,   1.0f,-1.0f, 1.0f,
+                                          1.0f, 1.0f, 1.0f,     1.0f, 1.0f,-1.0f,   -1.0f, 1.0f,-1.0f,
+                                          1.0f, 1.0f, 1.0f,     -1.0f, 1.0f,-1.0f,  -1.0f, 1.0f, 1.0f,
+                                          1.0f, 1.0f, 1.0f,     -1.0f, 1.0f, 1.0f,  1.0f,-1.0f, 1.0f};
+
 Canvas create(const glm::ivec2 &windowSize)
 {
-    const auto clearColor = constants::k_clearColor;
+    const auto clearColor = k_clearColor;
     glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
 
     Canvas::Renderables renderables = {};
     renderables.camera = camera::create(windowSize);
-    renderables.mesh = mesh::create(constants::shapes::k_cube);
+    renderables.mesh = mesh::create(k_cube);
 
     Canvas::Descriptor descriptor = {};
 
     // TODO: Have the source on the code side
-    descriptor.vertexFile.source = file::load(constants::k_defaultVertexShaderDir);
-    descriptor.fragmentFile.source = file::load(constants::k_defaultFragmentShaderDir);
+    descriptor.vertexFile.source = file::load(k_defaultVertexShaderDir);
+    descriptor.fragmentFile.source = file::load(k_defaultFragmentShaderDir);
 
     if (shader::create(&renderables.shader, descriptor.vertexFile.source, descriptor.fragmentFile.source)) {
         shader::use(renderables.shader);

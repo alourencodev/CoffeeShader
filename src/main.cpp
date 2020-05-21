@@ -3,7 +3,6 @@
 #include <chrono>
 
 #include "Canvas.hpp"
-#include "Constants.hpp"
 #include "FileWatcher.hpp"
 #include "Gui.hpp"
 #include "InputSystem.hpp"
@@ -13,7 +12,10 @@
 using namespace coffee; 
 using namespace std::chrono;
 
-constexpr int k_millisecsPerFrame = 1000 / constants::k_framesPerSecond;
+constexpr float k_framesPerSecond = 60;
+constexpr int k_millisecsPerFrame = 1000 / k_framesPerSecond;
+constexpr char k_title[] = "Coffee Shader";
+static const glm::ivec2 k_windowSize = {1280, 720};
 
 static GLFWwindow *s_window;
 static Canvas s_canvas = {};
@@ -21,8 +23,8 @@ static Canvas s_canvas = {};
 static void init()
 {
     window::Info windowInfo = {};
-    windowInfo.title = constants::window::k_title;
-    windowInfo.size = constants::window::k_size;
+    windowInfo.title = k_title;
+    windowInfo.size = k_windowSize;
     windowInfo.isResizable = true;
     s_window = window::create(windowInfo);
     s_canvas = canvas::create(windowInfo.size);

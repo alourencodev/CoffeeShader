@@ -4,7 +4,6 @@
 #include <functional>
 #include <glad/glad.h>
 
-#include "Constants.hpp"
 #include "Core/GL.hpp"
 #include "Core/Log.hpp"
 #include "Gui.hpp"
@@ -15,6 +14,8 @@ namespace coffee::shader
 constexpr char k_logTag[] = "Shader";
 constexpr char k_mvpUniform[] = "uMVP";
 constexpr GLsizei k_maxUniformNameLength = 64;
+constexpr uint16_t k_maxLogSize = 256;
+
 
 // TODO: Check if it is reliable to use GL_MAX_UNIFORM_LOCATIONS
 // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml
@@ -71,7 +72,7 @@ static bool compileShader(GLuint *outShaderId, GLenum shaderType, const std::str
     glCompileShader(shaderId);
 
     GLint success = 0;
-    char error[constants::k_maxLogSize] = "";
+    char error[k_maxLogSize] = "";
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
     if (success == GL_FALSE)
     {
@@ -94,7 +95,7 @@ static bool linkProgram(GLuint *outProgramId, GLuint vertShaderId, GLuint fragSh
     glLinkProgram(programId);
 
     GLint success = 0;
-    char error[constants::k_maxLogSize] = "";
+    char error[k_maxLogSize] = "";
     glGetProgramiv(programId, GL_LINK_STATUS, &success);
     if (success == GL_FALSE)
     {

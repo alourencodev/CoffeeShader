@@ -11,7 +11,6 @@
 #include <unordered_map>
 
 #include "Canvas.hpp"
-#include "Constants.hpp"
 #include "Core/Log.hpp"
 #include "Core/File.hpp"
 #include "Shader.hpp"
@@ -172,7 +171,7 @@ bool usedInput()
 
 void log(const char *format, ...)
 {
-    char buffer[constants::k_maxLogSize];
+    char buffer[256];
     va_list args;
     va_start(args, format);
     vsnprintf(buffer, sizeof(buffer), format, args);
