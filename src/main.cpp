@@ -43,6 +43,7 @@ static void update()
 
     if (gui::usedInput()) {
         input::discardInput();
+        trackball::release();
     } else {
         input::poll();
     }

@@ -10,6 +10,7 @@ namespace trackball
 {
 
 void init(Camera &camera);
+void release();
 void update();
 
 }

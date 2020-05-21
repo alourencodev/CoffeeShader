@@ -36,13 +36,13 @@ void init(Camera &camera)
         s_lastMousePosition = input::mousePosition();
     };
 
-    auto onRelease = []() -> void
-    {
-        s_updateFunction = []() -> void {};
-    };
-
     input::registerMouseEvent(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS, onPress);
-    input::registerMouseEvent(GLFW_MOUSE_BUTTON_LEFT, GLFW_RELEASE, onRelease);
+    input::registerMouseEvent(GLFW_MOUSE_BUTTON_LEFT, GLFW_RELEASE, release);
+}
+
+void release()
+{
+    s_updateFunction = []() -> void {};
 }
 
 void update()
