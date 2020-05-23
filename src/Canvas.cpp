@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Core/File.hpp"
+#include "DefaultShaders.hpp"
 #include "Gui.hpp"
 
 namespace coffee::canvas
@@ -14,8 +15,6 @@ namespace coffee::canvas
 constexpr char k_logTag[] = "Canvas";
 
 static const glm::vec3 k_clearColor = {0.2f, 0.2f, 0.2f};
-constexpr char k_defaultVertexShaderDir[] = "shaders/default.glsl.vert";
-constexpr char k_defaultFragmentShaderDir[] = "shaders/default.glsl.frag";
 
 // TODO: Move this elsewhere when adding more default shapes
 static const std::vector<float> k_cube = {-1.0f,-1.0f,-1.0f,    -1.0f,-1.0f, 1.0f,  -1.0f, 1.0f, 1.0f,
@@ -43,8 +42,8 @@ Canvas create(const glm::ivec2 &windowSize)
     Canvas::Descriptor descriptor = {};
 
     // TODO: Have the default source on the code side
-    descriptor.vertexFile.source = file::load(k_defaultVertexShaderDir);
-    descriptor.fragmentFile.source = file::load(k_defaultFragmentShaderDir);
+    descriptor.vertexFile.source = shader::k_defaultVertexSource;
+    descriptor.fragmentFile.source = shader::k_defaultFragmentSource;
 
     if (shader::create(&renderables.shader, descriptor.vertexFile.source, descriptor.fragmentFile.source)) {
         shader::use(renderables.shader);
