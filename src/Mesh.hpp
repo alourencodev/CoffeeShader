@@ -9,7 +9,8 @@ namespace coffee
 
 struct Mesh
 {
-    unsigned vbo;
+    unsigned vertexBuffer;
+    unsigned normalBuffer;
     unsigned vao;
     uint32_t vertexCount;
 };
@@ -17,7 +18,7 @@ struct Mesh
 namespace mesh
 {
 
-Mesh create(const std::vector<float> &vertices);
+Mesh create(const std::vector<float> &vertices, const std::vector<float> &normals);
 void clean(const Mesh &mesh);
 
 }
