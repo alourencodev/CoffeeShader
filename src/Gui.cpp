@@ -20,8 +20,8 @@ namespace coffee::gui
 
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
+constexpr char k_vertexFilters[] = "Vertex:vert,glsl";
 constexpr char k_fragmentFilters[] = "Fragment:frag,glsl";
-constexpr char k_vertexFilters[] = "Vertex:frag,glsl";
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
