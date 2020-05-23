@@ -48,7 +48,7 @@ void draw(const Canvas::Renderables &renderables);
 void terminate(const Canvas &canvas);
 
 void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage);
-
+void onWindowResize(Canvas *canvas, int width, int height);
 }
 
 }

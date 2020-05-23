@@ -21,6 +21,7 @@ namespace camera
 {
 
 Camera create(const glm::ivec2 &windowSize);
+void onWindowResize(Camera *camera, int width, int height);
 glm::mat4 viewProjection(const Camera &camera);
 
 }

@@ -32,6 +32,11 @@ static void init()
     input::init(s_window);
     trackball::init(s_canvas.renderables.camera);           // After input init
     gui::init(s_window, &s_canvas);
+
+    glfwSetWindowSizeCallback(s_window, [](GLFWwindow *windows, int width, int height) -> void
+    {
+        canvas::onWindowResize(&s_canvas, width, height);
+    });
 }
 
 static void update()

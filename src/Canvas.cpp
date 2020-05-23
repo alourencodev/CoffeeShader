@@ -42,7 +42,7 @@ Canvas create(const glm::ivec2 &windowSize)
 
     Canvas::Descriptor descriptor = {};
 
-    // TODO: Have the source on the code side
+    // TODO: Have the default source on the code side
     descriptor.vertexFile.source = file::load(k_defaultVertexShaderDir);
     descriptor.fragmentFile.source = file::load(k_defaultFragmentShaderDir);
 
@@ -51,6 +51,8 @@ Canvas create(const glm::ivec2 &windowSize)
     } else {
         gui::log(k_logTag, "Unable to compile startup shader");
     }
+
+    glViewport(0, 0, windowSize.x, windowSize.y);
 
     return {renderables, descriptor};
 }
@@ -101,6 +103,12 @@ void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage)
         fileWatcher::unwatch(shaderFile.watchHandle);
         shaderFile.watchHandle = fileWatcher::watch(dir, reloadShader);
     }
+}
+
+void onWindowResize(Canvas *canvas, int width, int height)
+{
+    camera::onWindowResize(&canvas->renderables.camera, width, height);
+    glViewport(0, 0, width, height);
 }
 
 }

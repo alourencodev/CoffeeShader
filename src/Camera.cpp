@@ -25,6 +25,11 @@ Camera create(const glm::ivec2 &windowSize)
     return camera;
 }
 
+void onWindowResize(Camera *camera, int width, int height)
+{
+    camera->aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+}
+
 glm::mat4 viewProjection(const Camera &camera)
 {
     auto view = glm::lookAt(camera.rotation * camera.position, glm::vec3(0.0f), camera.rotation * math::axis::k_up);
