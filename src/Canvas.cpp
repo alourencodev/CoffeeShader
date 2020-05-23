@@ -57,10 +57,10 @@ Canvas create(const glm::ivec2 &windowSize)
 
 void draw(const Canvas::Renderables &renderables)
 {
-    auto mvp = camera::viewProjection(renderables.camera);
+    auto viewProjection = camera::viewProjection(renderables.camera);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUniformMatrix4fv(renderables.shader.mvpIndex, 1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(renderables.shader.mvpIndex, 1, GL_FALSE, &viewProjection[0][0]);
     shader::updateUniforms(renderables.shader);
     glBindVertexArray(renderables.mesh.vao);
     glDrawArrays(GL_TRIANGLES, 0, renderables.mesh.vertexCount);
