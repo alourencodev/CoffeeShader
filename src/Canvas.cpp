@@ -52,6 +52,8 @@ Canvas create(const glm::ivec2 &windowSize)
     }
 
     glViewport(0, 0, windowSize.x, windowSize.y);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
     return {renderables, descriptor};
 }
