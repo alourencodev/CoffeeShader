@@ -13,14 +13,13 @@ constexpr uint32_t k_vertexSize = 3 * sizeof(GLfloat);
 
 Mesh create(const std::vector<float> &vertices, const std::vector<float> &normals)
 {
-    ASSERT_MSG(!vertices.empty(), "Trying to create mesh with no vertices.", "");   // TODO: Fix this assert pattern
-    ASSERT_MSG(!normals.empty(), "Trying to create mesh with no normals.", "");     // Check if this should be mandatory
+    ASSERT_MSG(!vertices.empty(), "Trying to create mesh with no vertices.");
+    ASSERT_MSG(!normals.empty(), "Trying to create mesh with no normals.");
 
     Mesh mesh = {};
     glGenVertexArrays(1, &mesh.vao);
     glBindVertexArray(mesh.vao);
     {
-        // CHECK if this can be optimized
         {   // BuildVertex Buffer
             glGenBuffers(1, &mesh.vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBuffer);

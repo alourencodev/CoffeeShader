@@ -8,7 +8,7 @@ namespace coffee
 
 #ifdef DEBUG
 #define ASSERT(exp) if (!(exp)) logFatal("Assert", "(%s) is not true.", #exp)
-#define ASSERT_MSG(exp, msg, ...) if (!(exp)) logFatal("Assert", msg, __VA_ARGS__)
+#define ASSERT_MSG(exp, ...) if (!(exp)) logFatal("Assert", __VA_ARGS__)
 #else
 #define ASSERT(exp) ;
 #define ASSERT_MSG(exp, msg, ...) ;
