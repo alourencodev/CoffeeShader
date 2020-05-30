@@ -20,14 +20,15 @@ Mesh create(const std::vector<float> &vertices, const std::vector<float> &normal
     glGenVertexArrays(1, &mesh.vao);
     glBindVertexArray(mesh.vao);
     {
-        {   // BuildVertex Buffer
+        {   // VertexBuffer
             glGenBuffers(1, &mesh.vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBuffer);
             glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
             glEnableVertexAttribArray(k_positionAttribIndex);
             glVertexAttribPointer(k_positionAttribIndex, 3, GL_FLOAT, GL_FALSE, k_vertexSize, nullptr);
         }
-        {   // BuildNormalBuffer
+
+        {   // NormalBuffer
             glGenBuffers(1, &mesh.normalBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, mesh.normalBuffer);
             glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.data(), GL_STATIC_DRAW);
