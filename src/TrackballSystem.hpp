@@ -9,7 +9,7 @@ struct Camera;
 namespace trackball
 {
 
-void init(Camera &camera);
+void init(Camera *camera);
 void release();
 void update();
 

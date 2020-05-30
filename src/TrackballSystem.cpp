@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "Camera.hpp"
+#include "Core/Assert.hpp"
 #include "Core/Math.hpp"
 #include "InputSystem.hpp"
 
@@ -12,27 +13,18 @@ namespace coffee::trackball
 
 constexpr float k_rotationSpeed = 0.005f;
 
-static std::function<void()> s_updateFunction = []() -> void {};
 static glm::ivec2 s_lastMousePosition;
+static bool s_isDragging = false;
+static Camera *s_camera;
 
-void init(Camera &camera)
+void init(Camera *camera)
 {
-    std::function<void()> updateCameraRotation = [&camera]() -> void
+    ASSERT(camera != nullptr);
+    s_camera = camera;
+
+    auto onPress = []() -> void
     {
-        glm::ivec2 mousePosition = input::mousePosition();
-        auto deltaPosition = mousePosition - s_lastMousePosition;
-        s_lastMousePosition = mousePosition;
-
-        float yaw = -deltaPosition.x * k_rotationSpeed;
-        float pitch = -deltaPosition.y * k_rotationSpeed;
-
-        auto rotationQuat = glm::angleAxis(pitch, math::axis::k_right) * glm::angleAxis(yaw, math::axis::k_up);
-        camera.rotation = camera.rotation * rotationQuat;
-    };
-
-    auto onPress = [updateCameraRotation]() -> void
-    {
-        s_updateFunction = updateCameraRotation;
+        s_isDragging = true;
         s_lastMousePosition = input::mousePosition();
     };
 
@@ -42,13 +34,23 @@ void init(Camera &camera)
 
 void release()
 {
-    s_updateFunction = []() -> void {};
+    s_isDragging = false;
 }
 
 void update()
 {
-    // CHECK: if it's better to call an empty lambda or make a null check?
-    s_updateFunction();
+    if (s_isDragging)
+    {
+        glm::ivec2 mousePosition = input::mousePosition();
+        auto deltaPosition = mousePosition - s_lastMousePosition;
+        s_lastMousePosition = mousePosition;
+
+        float yaw = -deltaPosition.x * k_rotationSpeed;
+        float pitch = -deltaPosition.y * k_rotationSpeed;
+
+        auto rotationQuat = glm::angleAxis(pitch, math::axis::k_right) * glm::angleAxis(yaw, math::axis::k_up);
+        s_camera->rotation = s_camera->rotation * rotationQuat; 
+    }
 }
 
 }
