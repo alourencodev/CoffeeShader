@@ -31,6 +31,9 @@ struct Shader
 namespace shader
 {
 
+constexpr uint32_t k_positionsAttribIndex = 0;
+constexpr uint32_t k_normalsAttribIndex = 1;
+
 bool create(Shader *outShader, const std::string &vertSource, const std::string &fragSource);
 void use(const Shader &shader);
 void updateUniforms(const Shader &shader);

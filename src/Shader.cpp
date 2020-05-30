@@ -16,7 +16,6 @@ constexpr char k_mvpUniform[] = "uMVP";
 constexpr GLsizei k_maxUniformNameLength = 64;
 constexpr uint16_t k_maxLogSize = 256;
 
-
 // TODO: Check if it is reliable to use GL_MAX_UNIFORM_LOCATIONS
 // https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glGet.xhtml
 constexpr size_t k_maxUniformBytes = 256;
@@ -159,6 +158,9 @@ bool create(Shader *outShader, const std::string &vertSource, const std::string 
     if (!linkProgram(&shader.programId, vertShaderId, fragShaderId)) {
         return false;
     }
+
+    glBindAttribLocation(shader.programId, k_positionsAttribIndex, "inPosition");
+    glBindAttribLocation(shader.programId, k_normalsAttribIndex, "inNormal");
 
     shader.mvpIndex = glGetUniformLocation(shader.programId, k_mvpUniform);
     setupUniforms(&shader);
