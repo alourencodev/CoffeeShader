@@ -11,7 +11,7 @@ namespace coffee::file
 
 constexpr char k_logTag[] = "File";
 
-std::string load(const std::string &dir)
+std::ifstream loadFileStream(const std::string &dir)
 {
     std::ifstream file(dir);
         
@@ -20,10 +20,17 @@ std::string load(const std::string &dir)
         logFatal(k_logTag, "Unable to open file %s.", dir);
     }
 
-    std::stringstream buffer;
-    buffer << file.rdbuf();
+    return file;
+}
 
-    return buffer.str();  
+std::string loadString(const std::string &dir)
+{
+    auto ifstream = loadFileStream(dir);
+    std::stringstream buffer;
+    buffer << ifstream.rdbuf();
+    ifstream.close();
+
+    return buffer.str();
 }
 
 bool openDialog(std::string *outFileName, osdialog_filters *filters)

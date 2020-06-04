@@ -8,35 +8,33 @@ namespace coffee::geometry
 
 namespace cube
 {
+static const std::vector<glm::vec3> k_vertices = {glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(-1.0f, -1.0f,  1.0f),
+                                                  glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f,  1.0f),
+                                                  glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f,  1.0f),
+                                                  glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f),
+                                                  glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f),
+                                                  glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f,  1.0f),
+                                                  glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f, -1.0f,  1.0f),
+                                                  glm::vec3( 1.0f,  1.0f,  1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3(-1.0f,  1.0f, -1.0f),
+                                                  glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f),
+                                                  glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f, -1.0f, -1.0f),
+                                                  glm::vec3( 1.0f, -1.0f, -1.0f), glm::vec3( 1.0f,  1.0f, -1.0f), glm::vec3( 1.0f,  1.0f,  1.0f),
+                                                  glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3( 1.0f,  1.0f,  1.0f)};
 
-static const std::vector<float> k_vertices = {-1.0f, -1.0f, -1.0f,       1.0f, -1.0f,  1.0f,        -1.0f, -1.0f,  1.0f,
-                                               1.0f,  1.0f,  1.0f,      -1.0f,  1.0f, -1.0f,        -1.0f,  1.0f,  1.0f,
-                                              -1.0f,  1.0f,  1.0f,      -1.0f, -1.0f, -1.0f,        -1.0f, -1.0f,  1.0f,
-                                              -1.0f,  1.0f, -1.0f,       1.0f, -1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,
-                                               1.0f, -1.0f, -1.0f,       1.0f,  1.0f,  1.0f,         1.0f, -1.0f,  1.0f,
-                                              -1.0f, -1.0f,  1.0f,       1.0f,  1.0f,  1.0f,        -1.0f,  1.0f,  1.0f,
-                                              -1.0f, -1.0f, -1.0f,       1.0f, -1.0f, -1.0f,         1.0f, -1.0f,  1.0f,
-                                               1.0f,  1.0f,  1.0f,       1.0f,  1.0f, -1.0f,        -1.0f,  1.0f, -1.0f,
-                                              -1.0f,  1.0f,  1.0f,      -1.0f,  1.0f, -1.0f,        -1.0f, -1.0f, -1.0f,
-                                              -1.0f,  1.0f, -1.0f,       1.0f,  1.0f, -1.0f,         1.0f, -1.0f, -1.0f,
-                                               1.0f, -1.0f, -1.0f,       1.0f,  1.0f, -1.0f,         1.0f,  1.0f,  1.0f,
-                                              -1.0f, -1.0f,  1.0f,       1.0f, -1.0f,  1.0f,         1.0f,  1.0f,  1.0f };
-
-static const std::vector<float> k_normals = { 0.0f, -1.0f,  0.0f,       0.0f, -1.0f,  0.0f,         0.0f, -1.0f,  0.0f,
-                                              0.0f,  1.0f, -0.0f,       0.0f,  1.0f, -0.0f,         0.0f,  1.0f, -0.0f,
-                                             -1.0f, -0.0f,  0.0f,      -1.0f, -0.0f,  0.0f,        -1.0f, -0.0f,  0.0f,
-                                              0.0f, -0.0f, -1.0f,       0.0f, -0.0f, -1.0f,         0.0f, -0.0f, -1.0f,
-                                              1.0f, -0.0f,  0.0f,       1.0f, -0.0f,  0.0f,         1.0f, -0.0f,  0.0f,
-                                             -0.0f,  0.0f,  1.0f,      -0.0f,  0.0f,  1.0f,        -0.0f,  0.0f,  1.0f,
-                                              0.0f, -1.0f,  0.0f,       0.0f, -1.0f,  0.0f,         0.0f, -1.0f,  0.0f,
-                                              0.0f,  1.0f, -0.0f,       0.0f,  1.0f, -0.0f,         0.0f,  1.0f, -0.0f,
-                                             -1.0f, -0.0f,  0.0f,      -1.0f, -0.0f,  0.0f,        -1.0f, -0.0f,  0.0f,
-                                              0.0f, -0.0f, -1.0f,       0.0f, -0.0f, -1.0f,         0.0f, -0.0f, -1.0f,
-                                              1.0f, -0.0f,  0.0f,       1.0f, -0.0f,  0.0f,         1.0f, -0.0f,  0.0f,
-                                             -0.0f,  0.0f,  1.0f,      -0.0f,  0.0f,  1.0f,        -0.0f,  0.0f,  1.0f };
+static const std::vector<glm::vec3> k_normals = {glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3( 0.0f, -1.0f,  0.0f),
+                                                 glm::vec3( 0.0f,  1.0f, -0.0f), glm::vec3( 0.0f,  1.0f, -0.0f), glm::vec3( 0.0f,  1.0f, -0.0f),
+                                                 glm::vec3(-1.0f, -0.0f,  0.0f), glm::vec3(-1.0f, -0.0f,  0.0f), glm::vec3(-1.0f, -0.0f,  0.0f),
+                                                 glm::vec3( 0.0f, -0.0f, -1.0f), glm::vec3( 0.0f, -0.0f, -1.0f), glm::vec3( 0.0f, -0.0f, -1.0f),
+                                                 glm::vec3( 1.0f, -0.0f,  0.0f), glm::vec3( 1.0f, -0.0f,  0.0f), glm::vec3( 1.0f, -0.0f,  0.0f),
+                                                 glm::vec3(-0.0f,  0.0f,  1.0f), glm::vec3(-0.0f,  0.0f,  1.0f), glm::vec3(-0.0f,  0.0f,  1.0f),
+                                                 glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3( 0.0f, -1.0f,  0.0f), glm::vec3( 0.0f, -1.0f,  0.0f),
+                                                 glm::vec3( 0.0f,  1.0f, -0.0f), glm::vec3( 0.0f,  1.0f, -0.0f), glm::vec3( 0.0f,  1.0f, -0.0f),
+                                                 glm::vec3(-1.0f, -0.0f,  0.0f), glm::vec3(-1.0f, -0.0f,  0.0f), glm::vec3(-1.0f, -0.0f,  0.0f),
+                                                 glm::vec3( 0.0f, -0.0f, -1.0f), glm::vec3( 0.0f, -0.0f, -1.0f), glm::vec3( 0.0f, -0.0f, -1.0f),
+                                                 glm::vec3( 1.0f, -0.0f,  0.0f), glm::vec3( 1.0f, -0.0f,  0.0f), glm::vec3( 1.0f, -0.0f,  0.0f),
+                                                 glm::vec3(-0.0f,  0.0f,  1.0f), glm::vec3(-0.0f,  0.0f,  1.0f), glm::vec3(-0.0f,  0.0f,  1.0f)};
 
 }
-
 }
 
 #endif

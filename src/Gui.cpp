@@ -22,6 +22,7 @@ constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
 constexpr char k_vertexFilters[] = "Vertex:vert,glsl";
 constexpr char k_fragmentFilters[] = "Fragment:frag,glsl";
+constexpr char k_objFilters[] = "Obj:obj";
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
@@ -51,7 +52,7 @@ static void showToolbar()
     auto showOpenShader = []() -> void
     {
         // TODO: Get better way to manage filters memory. Probably will need to hack submodule
-        if (ImGui::MenuItem("Vertex")) {
+        if (ImGui::MenuItem("Vertex...")) {
             osdialog_filters *filters = osdialog_filters_parse(k_vertexFilters);
             std::string dir;
             if (file::openDialog(&dir, filters)) {
@@ -59,7 +60,7 @@ static void showToolbar()
             }
             osdialog_filters_free(filters);
         }
-        if (ImGui::MenuItem("Fragment")) {
+        if (ImGui::MenuItem("Fragment...")) {
             osdialog_filters *filters = osdialog_filters_parse(k_fragmentFilters);
             std::string dir; 
             if (file::openDialog(&dir, filters)) {
@@ -74,6 +75,15 @@ static void showToolbar()
     if (ImGui::BeginMenu("File")) {
         if (ImGui::BeginMenu("Open Shader")) {
             showOpenShader();
+        }
+
+        if (ImGui::MenuItem("Open Mesh...")) {
+            auto *filters = osdialog_filters_parse(k_objFilters);
+            std::string dir;
+            if (file::openDialog(&dir, filters)) {
+                canvas::loadObj(s_canvas, dir);
+            }
+            osdialog_filters_free(filters);
         }
 
         ImGui::EndMenu();

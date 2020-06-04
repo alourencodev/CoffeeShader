@@ -2,6 +2,7 @@
 #define COFFEE_MESH_HPP
 
 #include <cstdint>
+#include <glm/vec3.hpp>
 #include <vector>
 
 namespace coffee
@@ -18,7 +19,7 @@ struct Mesh
 namespace mesh
 {
 
-Mesh create(const std::vector<float> &vertices, const std::vector<float> &normals);
+Mesh create(const std::vector<glm::vec3> &vertices, const std::vector<glm::vec3> &normals);
 void clean(const Mesh &mesh);
 
 }

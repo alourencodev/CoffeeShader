@@ -9,6 +9,7 @@
 #include "Data/DefaultShaders.hpp"
 #include "Data/DefaultGeometry.hpp"
 #include "Gui.hpp"
+#include "ObjLoader.hpp"
 
 namespace coffee::canvas
 {
@@ -69,7 +70,7 @@ void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage)
 
     auto &descriptor = canvas->descriptor; 
     auto &shaderFile = stage == ShaderStage::eVertex ? descriptor.vertexFile : descriptor.fragmentFile;
-    shaderFile.source = file::load(dir);
+    shaderFile.source = file::loadString(dir);
 
     {   // SetShader
         auto &renderables = canvas->renderables;
@@ -89,6 +90,14 @@ void loadShader(Canvas *canvas, const std::string &dir, ShaderStage stage)
         fileWatcher::unwatch(shaderFile.watchHandle);
         shaderFile.watchHandle = fileWatcher::watch(dir, reloadShader);
     }
+}
+
+void loadObj(Canvas *canvas, const std::string &dir)
+{
+    auto ifstream = file::loadFileStream(dir);
+    Obj obj = obj::load(ifstream);
+    mesh::clean(canvas->renderables.mesh);
+    canvas->renderables.mesh = mesh::create(obj.vertices, obj.normals);
 }
 
 void onWindowResize(Canvas *canvas, int width, int height)
