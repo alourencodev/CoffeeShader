@@ -6,7 +6,6 @@
 #include <utility>
 #include <vector>
 
-#include "Canvas.hpp"
 #include "Core/Containers.hpp"
 #include "Core/Log.hpp"
 
