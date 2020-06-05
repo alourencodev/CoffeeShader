@@ -21,9 +21,6 @@ namespace coffee::gui
 
 constexpr char k_glslVersion[] = "#version 410";
 constexpr float k_valueEditorDragSpeed = 0.1f;
-constexpr char k_vertexFilters[] = "Vertex:vert,glsl";
-constexpr char k_fragmentFilters[] = "Fragment:frag,glsl";
-constexpr char k_objFilters[] = "Obj:obj";
 
 #define TYPE_EDITOR(imgui_call, cast_type) \
 [](const char *label, void *value) -> void \
@@ -35,6 +32,9 @@ static std::vector<std::function<void()>> s_activeGUIShowFunctions;
 static std::vector<std::string> s_guiLogs;
 static Canvas *s_canvas = nullptr;
 static GLFWwindow *s_window = nullptr;
+static osdialog_filters *s_vertexFilters = nullptr;
+static osdialog_filters *s_fragmentFilters = nullptr;
+static osdialog_filters *s_objFilters = nullptr; 
 
 using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
 static TypeEditorFunctionMap s_typeEditorMap = 
@@ -53,22 +53,17 @@ static void showToolbar()
 {
     auto showOpenShader = []() -> void
     {
-        // TODO: Get better way to manage filters memory. Probably will need to hack submodule
         if (ImGui::MenuItem("Vertex...")) {
-            osdialog_filters *filters = osdialog_filters_parse(k_vertexFilters);
             std::string dir;
-            if (file::openDialog(&dir, filters)) {
+            if (file::openDialog(&dir, s_vertexFilters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eVertex);
             }
-            osdialog_filters_free(filters);
         }
         if (ImGui::MenuItem("Fragment...")) {
-            osdialog_filters *filters = osdialog_filters_parse(k_fragmentFilters);
             std::string dir; 
-            if (file::openDialog(&dir, filters)) {
+            if (file::openDialog(&dir, s_fragmentFilters)) {
                 canvas::loadShader(s_canvas, dir, ShaderStage::eFragment);
             }
-            osdialog_filters_free(filters);
         }
         ImGui::EndMenu();
     };
@@ -80,12 +75,10 @@ static void showToolbar()
         }
 
         if (ImGui::MenuItem("Open Mesh...")) {
-            auto *filters = osdialog_filters_parse(k_objFilters);
             std::string dir;
-            if (file::openDialog(&dir, filters)) {
+            if (file::openDialog(&dir, s_objFilters)) {
                 canvas::loadObj(s_canvas, dir);
             }
-            osdialog_filters_free(filters);
         }
 
         ImGui::Dummy(ImVec2(0.0f, 4.0f));
@@ -149,6 +142,10 @@ void init(GLFWwindow *window, Canvas *canvas)
     ASSERT(window != nullptr);
     ASSERT(canvas != nullptr);
 
+    s_vertexFilters = osdialog_filters_parse("Vertex:vert,glsl");
+    s_fragmentFilters = osdialog_filters_parse("Fragment:frag,glsl");
+    s_objFilters = osdialog_filters_parse("Obj:obj");
+
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -183,6 +180,10 @@ void terminate()
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    osdialog_filters_free(s_objFilters);
+    osdialog_filters_free(s_fragmentFilters);
+    osdialog_filters_free(s_vertexFilters);
 }
 
 bool usedInput()
