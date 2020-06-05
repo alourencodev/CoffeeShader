@@ -5,6 +5,7 @@
 #include <imgui_impl_opengl3.h>
 #include <functional>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <osdialog/osdialog.h>
 #include <string>
 #include <vector>
@@ -33,6 +34,7 @@ constexpr char k_objFilters[] = "Obj:obj";
 static std::vector<std::function<void()>> s_activeGUIShowFunctions;
 static std::vector<std::string> s_guiLogs;
 static Canvas *s_canvas = nullptr;
+static GLFWwindow *s_window = nullptr;
 
 using TypeEditorFunctionMap = std::unordered_map<GLenum, std::function<void(const char *, void *)>>;
 static TypeEditorFunctionMap s_typeEditorMap = 
@@ -84,6 +86,12 @@ static void showToolbar()
                 canvas::loadObj(s_canvas, dir);
             }
             osdialog_filters_free(filters);
+        }
+
+        ImGui::Dummy(ImVec2(0.0f, 4.0f));
+        ImGui::Separator();
+        if (ImGui::MenuItem("Exit")) {
+            glfwSetWindowShouldClose(s_window, GLFW_TRUE);
         }
 
         ImGui::EndMenu();
@@ -138,18 +146,21 @@ static void showLogger()
 
 void init(GLFWwindow *window, Canvas *canvas)
 {   
-        ImGui::CreateContext();
-        ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-        ImGui_ImplOpenGL3_Init(k_glslVersion);
+    ASSERT(window != nullptr);
+    ASSERT(canvas != nullptr);
 
-        s_canvas = canvas;
-        s_activeGUIShowFunctions.reserve(4);
-        s_activeGUIShowFunctions.emplace_back(showUniformInspector);
-        s_activeGUIShowFunctions.emplace_back(showToolbar);
-        s_activeGUIShowFunctions.emplace_back(showLogger);
-        
-        s_guiLogs.reserve(10);
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(k_glslVersion);
+
+    s_canvas = canvas;
+    s_window = window;
+    s_activeGUIShowFunctions.reserve(4);
+    s_activeGUIShowFunctions.emplace_back(showUniformInspector);
+    s_activeGUIShowFunctions.emplace_back(showToolbar);
+    s_activeGUIShowFunctions.emplace_back(showLogger);
+    s_guiLogs.reserve(10);
 }
 
 void draw()
