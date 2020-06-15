@@ -3,6 +3,8 @@
 
 #include <glad/glad.h>
 
+#include "Core/Log.hpp"
+
 namespace coffee::utils
 {
 
@@ -35,6 +37,7 @@ constexpr int32_t sizeofGLType(GLenum type)
         case GL_FLOAT_VEC4:
             return sizeof(GLfloat) * 4;
         default:
+            logWarning("GL", "Trying to get the size of an unknown gl type.");
             return -1;
     }
 }
