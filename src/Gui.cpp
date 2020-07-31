@@ -102,6 +102,8 @@ static void showToolbar()
 
 static void showUniformInspector()
 {
+    ImGui::SetNextWindowPos(ImVec2(1000, 100), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(250, 550), ImGuiCond_FirstUseEver);
     ImGui::Begin("Uniform Editor");
 
     const auto &uniforms = s_canvas->renderables.shader.uniforms;
@@ -117,6 +119,8 @@ static void showUniformInspector()
 
 static void showLogger()
 {
+    ImGui::SetNextWindowPos(ImVec2(50, 500), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(450, 200), ImGuiCond_FirstUseEver);
     ImGui::Begin("Log");
 
     if (ImGui::Button("Clear")) {
