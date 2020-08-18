@@ -4,8 +4,6 @@ add_subdirectory(lib)
 
 project(CoffeeShader VERSION 0.1.0 LANGUAGES CXX)
 
-find_package(glfw3 3.2 REQUIRED)
-
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(COMPILE_OPTIONS "-Werror")

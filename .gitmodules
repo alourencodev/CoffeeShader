@@ -4,3 +4,6 @@
 [submodule "lib/osdialog"]
 	path = lib/osdialog
 	url = https://github.com/AndrewBelt/osdialog.git
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw.git
