@@ -7,7 +7,6 @@ set(OSDIALOG_SRC
     osdialog/osdialog.c
 )
 
-# TODO: Support more platforms
 if (UNIX) 
     SET(OSDIALOG_SRC ${OSDIALOG_SRC} osdialog/osdialog_gtk3.c)
     find_package(PkgConfig REQUIRED)

@@ -49,3 +49,5 @@ compile_commands.json
 CTestTestfile.cmake
 
 imgui.ini
+
+CMakeSettings.json
