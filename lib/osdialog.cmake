@@ -10,12 +10,14 @@ set(OSDIALOG_SRC
 # TODO: Support more platforms
 if (UNIX) 
     SET(OSDIALOG_SRC ${OSDIALOG_SRC} osdialog/osdialog_gtk3.c)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+elseif(WIN32)
+    SET(OSDIALOG_SRC ${OSDIALOG_SRC} osdialog/osdialog_win.c)
 else ()
     message(FATAL_ERROR "Platform not supported")
 endif ()
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
 include_directories(${GTK3_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
