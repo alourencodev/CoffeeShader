@@ -51,7 +51,7 @@ void poll()
         std::filesystem::file_time_type currentModifiedTime = std::filesystem::last_write_time(file.path);
         if (currentModifiedTime != file.lastModifiedTime) {
             file.lastModifiedTime = currentModifiedTime;
-            s_onModifiedEvents[i](s_watchedFiles[i].path);
+            s_onModifiedEvents[i](s_watchedFiles[i].path.string());
         }
     }
 }

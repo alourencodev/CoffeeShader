@@ -62,7 +62,7 @@ static void fixedUpdate()
     fileWatcher::poll();
 }
 
-static void terminate()
+static void terminator()
 {
     gui::terminate();
     canvas::terminate(s_canvas);
@@ -85,7 +85,7 @@ int main()
         }        
     }
     
-    terminate();
+    terminator();
 
     return 0;
 }

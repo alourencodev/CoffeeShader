@@ -13,8 +13,8 @@ struct Camera
     glm::quat rotation;
     float fieldOfView;
     float aspectRatio;
-    float near;
-    float far;
+    float viewNear;
+    float viewFar;
 };
 
 namespace camera
