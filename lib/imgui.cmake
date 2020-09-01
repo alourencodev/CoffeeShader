@@ -13,5 +13,5 @@ SET(IMGUI_SRC
 
 add_library(imgui ${IMGUI_SRC})
 add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
-target_link_libraries(imgui glad)
+target_link_libraries(imgui glad glfw)
 target_include_directories(imgui PUBLIC imgui imgui/examples)
